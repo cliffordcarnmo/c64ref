@@ -11,68 +11,68 @@ STATUS REGISTER
   |   |       Break Command Flag, 0 = No break, 1 = Break
   |   Overflow Flag, 0 = False, 1 = True
   Negative Flag, 0 = Positive, 1 = Negative
-   
+
 OPCODES
----------------------------------------
-ADC   Add Memory to Accumulator with Carry
-AND   "AND" Memory with Accumulator
-ASL   Shift Left One Bit (Memory or Accumulator)
-BCC   Branch on Carry Clear
-BCS   Branch on Carry Set
-BEQ   Branch on Result Zero
-BIT   Test Bits in Memory with Accumulator
-BMI   Branch on Result Minus
-BNE   Branch on Result not Zero
-BPL   Branch on Result Plus
-BRK   Force Break
-BVC   Branch on Overflow Clear
-BVS   Branch on Overflow Set
-CLC   Clear Carry Flag
-CLD   Clear Decimal Mode
-CLI   Clear interrupt Disable Bit
-CLV   Clear Overflow Flag
-CMP   Compare Memory and Accumulator
-CPX   Compare Memory and Index X
-CPY   Compare Memory and Index Y
-DEC   Decrement Memory by One
-DEX   Decrement Index X by One
-DEY   Decrement Index Y by One
-EOR   "Exclusive-Or" Memory with Accumulator
-INC   Increment Memory by One
-INX   Increment Index X by One
-INY   Increment Index Y by One
-JMP   Jump to New Location
-JSR   Jump to New Location Saving Return Address
-LDA   Load Accumulator with Memory
-LDX   Load Index X with Memory
-LDY   Load Index Y with Memory
-LSR   Shift Right One Bit (Memory or Accumulator)
-NOP   No Operation
-ORA   "OR" Memory with Accumulator
-PHA   Push Accumulator on Stack
-PHP   Push Processor Status on Stack
-PLA   Pull Accumulator from Stack
-PLP   Pull Processor Status from Stack
-ROL   Rotate One Bit Left (Memory or Accumulator)
-ROR   Rotate One Bit Right (Memory or Accumulator)
-RTI   Return from Interrupt
-RTS   Return from Subroutine
-SBC   Subtract Memory from Accumulator with Borrow
-SEC   Set Carry Flag
-SED   Set Decimal Mode
-SEI   Set Interrupt Disable Status
-STA   Store Accumulator in Memory
-STX   Store Index X in Memory
-STY   Store Index Y in Memory
-TAX   Transfer Accumulator to Index X
-TAY   Transfer Accumulator to Index Y
-TSX   Transfer Stack Pointer to Index X
-TXA   Transfer Index X to Accumulator
-TXS   Transfer Index X to Stack Pointer
-TYA   Transfer Index Y to Accumulator
+--------------------------------------------------------------------------------
+ADC Add Memory to Accumulator with Carry
+AND "AND" Memory with Accumulator
+ASL Shift Left One Bit (Memory or Accumulator)
+BCC Branch on Carry Clear
+BCS Branch on Carry Set
+BEQ Branch on Result Zero
+BIT Test Bits in Memory with Accumulator
+BMI Branch on Result Minus
+BNE Branch on Result not Zero
+BPL Branch on Result Plus
+BRK Force Break
+BVC Branch on Overflow Clear
+BVS Branch on Overflow Set
+CLC Clear Carry Flag
+CLD Clear Decimal Mode
+CLI Clear interrupt Disable Bit
+CLV Clear Overflow Flag
+CMP Compare Memory and Accumulator
+CPX Compare Memory and Index X
+CPY Compare Memory and Index Y
+DEC Decrement Memory by One
+DEX Decrement Index X by One
+DEY Decrement Index Y by One
+EOR "Exclusive-Or" Memory with Accumulator
+INC Increment Memory by One
+INX Increment Index X by One
+INY Increment Index Y by One
+JMP Jump to New Location
+JSR Jump to New Location Saving Return Address
+LDA Load Accumulator with Memory
+LDX Load Index X with Memory
+LDY Load Index Y with Memory
+LSR Shift Right One Bit (Memory or Accumulator)
+NOP No Operation
+ORA "OR" Memory with Accumulator
+PHA Push Accumulator on Stack
+PHP Push Processor Status on Stack
+PLA Pull Accumulator from Stack
+PLP Pull Processor Status from Stack
+ROL Rotate One Bit Left (Memory or Accumulator)
+ROR Rotate One Bit Right (Memory or Accumulator)
+RTI Return from Interrupt
+RTS Return from Subroutine
+SBC Subtract Memory from Accumulator with Borrow
+SEC Set Carry Flag
+SED Set Decimal Mode
+SEI Set Interrupt Disable Status
+STA Store Accumulator in Memory
+STX Store Index X in Memory
+STY Store Index Y in Memory
+TAX Transfer Accumulator to Index X
+TAY Transfer Accumulator to Index Y
+TSX Transfer Stack Pointer to Index X
+TXA Transfer Index X to Accumulator
+TXS Transfer Index X to Stack Pointer
+TYA Transfer Index Y to Accumulator
 
 ADDRESSING MODES
----------------------------------------
+--------------------------------------------------------------------------------
 Implied addressing
 RTS
 1 byte
@@ -123,8 +123,65 @@ LDY #$01
 LDA ($10,Y)
 Result = #$5001
 
+BIT-WISE BOOLEANS
+--------------------------------------------------------------------------------
+AND
+0 0 = 0
+0 1 = 0
+1 0 = 0
+1 1 = 1
+
+ORA
+0 0 = 0
+0 1 = 1
+1 0 = 1
+1 1 = 1
+
+EOR
+0 0	= 0
+0 1	= 1
+1 0	= 1
+1 1	= 0
+
+SPRITE DATA FORMAT
+--------------------------------------------------------------------------------
+64 bytes (21 rows * 3 columns)
+
+SPRITE POINTERS
+--------------------------------------------------------------------------------
+Sprite pointers are located at $07f8-$07ff (one for each sprite).
+If sprites data is located at for example $3e00, pointer value is $3e00 / 64 = $f8.
+LDA #$f8
+STA $07f8 (pointer for sprite 0)
+
+KOALA IMAGE DATA FORMAT
+--------------------------------------------------------------------------------
+2 bytes		Load address
+8000 bytes	Bitmap data
+1000 bytes	Character data
+1000 bytes	Color data
+
+COLORS
+--------------------------------------------------------------------------------
+0 Black
+1 White
+2 Red
+3 Cyan
+4 Purple
+5 Green
+6 Blue
+7 Yellow
+8 Orange
+9 Brown
+a Light red
+b Darkest grey
+c Dark grey
+d Light green
+e Light blue
+f Light grey
+
 RAM SUMMARY
----------------------------------------
+--------------------------------------------------------------------------------
 $0000-$00FF Page 0			Zeropage addressing
 $0100-$01FF	Page 1			Enhanced Zeropage contains the stack
 $0200-$02FF	Page 2			Operating System and BASIC pointers
@@ -142,15 +199,15 @@ $DE00-$DFFF	Page 222-223	Reserved for interface extensions
 $E000-$FFFF	Page 224-255	Free machine language program storage area (when switched-out with ROM)
 
 ROM SUMMARY
----------------------------------------
+--------------------------------------------------------------------------------
 $8000-$9FFF Page 128-159	Cartridge ROM (low)
 $A000-$BFFF Page 160-191	BASIC interpretor ROM or cartridge ROM (high)
 $D000-$DFFF Page 208-223	Character generator ROM
 $E000-$FFFF Page 224-255	KERNAL ROM or cartridge ROM (high)
 
 I/O Table
----------------------------------------
-$0000-$0001 CPU I/O port
+--------------------------------------------------------------------------------
+$0000-$0001					CPU I/O port
 $D000-$D3FF Page 208-211	VIC-II registers
 $D400-$D7FF Page 212-215	SID registers
 $D800-$DBFF Page 216-219	Color Memory
@@ -160,7 +217,7 @@ $DE00-$DEFF Page 222		I/O 1
 $DF00-$DFFF Page 223		I/O 2
 
 MEMORY MAP
----------------------------------------
+--------------------------------------------------------------------------------
 $0000  
 Processor port data direction register. Bits:
 *   Bit #x: 0 = Bit #x in processor port can only be read; 1 = Bit #x in processor port can be read and written.
@@ -1667,7 +1724,7 @@ Execution address of interrupt service routine.
 Default: $FF48.
 
 KERNAL
----------------------------------------
+--------------------------------------------------------------------------------
 $E000/57344 EXP continued From BASIC ROM
 $E043/57411 Series Evaluation
 $E08D/57485 Constants for RND
