@@ -1273,7 +1273,6 @@ Write: Enable further detection of sprite-sprite collisions.
 $D01F  
 Sprite-background collision register. Read bits:
 *   Bit #x: 1 = Sprite #x collided with background.
-
 Write: Enable further detection of sprite-background collisions.
 
 $D020  
