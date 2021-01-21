@@ -1,0 +1,1953 @@
+STATUS REGISTER
+---------------------------------
+| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+| N | V |   | B | D | I | Z | C |
+---------------------------------
+  |   |       |   |   |   |   |
+  |   |       |   |   |   |   Carry Flag, 0 = False, 1 = True
+  |   |       |   |   |   Zero Flag, 0 = Not zero, 1 = Zero
+  |   |       |   |   IRQ Disable Flag, 0 = Enable, 1 Disable
+  |   |       |   Decimal Mode Flag, 0 = False, 1 = True
+  |   |       Break Command Flag, 0 = No break, 1 = Break
+  |   Overflow Flag, 0 = False, 1 = True
+  Negative Flag, 0 = Positive, 1 = Negative
+   
+OPCODES
+---------------------------------------
+ADC   Add Memory to Accumulator with Carry
+AND   "AND" Memory with Accumulator
+ASL   Shift Left One Bit (Memory or Accumulator)
+BCC   Branch on Carry Clear
+BCS   Branch on Carry Set
+BEQ   Branch on Result Zero
+BIT   Test Bits in Memory with Accumulator
+BMI   Branch on Result Minus
+BNE   Branch on Result not Zero
+BPL   Branch on Result Plus
+BRK   Force Break
+BVC   Branch on Overflow Clear
+BVS   Branch on Overflow Set
+CLC   Clear Carry Flag
+CLD   Clear Decimal Mode
+CLI   Clear interrupt Disable Bit
+CLV   Clear Overflow Flag
+CMP   Compare Memory and Accumulator
+CPX   Compare Memory and Index X
+CPY   Compare Memory and Index Y
+DEC   Decrement Memory by One
+DEX   Decrement Index X by One
+DEY   Decrement Index Y by One
+EOR   "Exclusive-Or" Memory with Accumulator
+INC   Increment Memory by One
+INX   Increment Index X by One
+INY   Increment Index Y by One
+JMP   Jump to New Location
+JSR   Jump to New Location Saving Return Address
+LDA   Load Accumulator with Memory
+LDX   Load Index X with Memory
+LDY   Load Index Y with Memory
+LSR   Shift Right One Bit (Memory or Accumulator)
+NOP   No Operation
+ORA   "OR" Memory with Accumulator
+PHA   Push Accumulator on Stack
+PHP   Push Processor Status on Stack
+PLA   Pull Accumulator from Stack
+PLP   Pull Processor Status from Stack
+ROL   Rotate One Bit Left (Memory or Accumulator)
+ROR   Rotate One Bit Right (Memory or Accumulator)
+RTI   Return from Interrupt
+RTS   Return from Subroutine
+SBC   Subtract Memory from Accumulator with Borrow
+SEC   Set Carry Flag
+SED   Set Decimal Mode
+SEI   Set Interrupt Disable Status
+STA   Store Accumulator in Memory
+STX   Store Index X in Memory
+STY   Store Index Y in Memory
+TAX   Transfer Accumulator to Index X
+TAY   Transfer Accumulator to Index Y
+TSX   Transfer Stack Pointer to Index X
+TXA   Transfer Index X to Accumulator
+TXS   Transfer Index X to Stack Pointer
+TYA   Transfer Index Y to Accumulator
+
+ADDRESSING MODES
+---------------------------------------
+Implied addressing
+RTS
+1 byte
+
+Accumulator addressing
+ASL
+1 byte
+
+Immediate addressing
+LDA #64
+2 bytes
+
+Absolute addressing
+LDA $1000
+STA $2000
+3 bytes
+
+Indexed absolute addressing
+LDX #01
+STA $1000,x
+
+Zeropage addressing
+LDA $10
+STA $20
+2 bytes
+
+Indexed zeropage addressing
+LDX #$01
+STA $10,x
+
+Relative addressing
+BEQ Next
+
+Absolute-indirect addressing
+JMP ($F000)
+
+Indexed-indirect addressing
+$10 = #$00
+$11 = #$50
+LDX #$05
+LDA ($05,X)
+Result = #$5000
+
+Indirect-indexed addressing
+$10 = #$00
+$11 = #$50
+LDY #$01
+LDA ($10,Y)
+Result = #$5001
+
+RAM SUMMARY
+---------------------------------------
+$0000-$00FF Page 0			Zeropage addressing
+$0100-$01FF	Page 1			Enhanced Zeropage contains the stack
+$0200-$02FF	Page 2			Operating System and BASIC pointers
+$0300-$03FF	Page 3			Operating System and BASIC pointers
+$0400-$07FF	Page 4-7		Screen Memory
+$0800-$9FFF	Page 8-159		Free BASIC program storage area (38911 bytes)
+$A000-$BFFF	Page 160-191	Free machine language program storage area (when switched-out with ROM)
+$C000-$CFFF	Page 192-207	Free machine language program storage area
+$D000-$D3FF	Page 208-211	
+$D400-$D7FF	Page 212-215	
+$D800-$DBFF	Page 216-219	
+$DC00-$DCFF	Page 220	
+$DD00-$DDFF	Page 221	
+$DE00-$DFFF	Page 222-223	Reserved for interface extensions
+$E000-$FFFF	Page 224-255	Free machine language program storage area (when switched-out with ROM)
+
+ROM SUMMARY
+---------------------------------------
+$8000-$9FFF Page 128-159	Cartridge ROM (low)
+$A000-$BFFF Page 160-191	BASIC interpretor ROM or cartridge ROM (high)
+$D000-$DFFF Page 208-223	Character generator ROM
+$E000-$FFFF Page 224-255	KERNAL ROM or cartridge ROM (high)
+
+I/O Table
+---------------------------------------
+$0000-$0001 CPU I/O port
+$D000-$D3FF Page 208-211	VIC-II registers
+$D400-$D7FF Page 212-215	SID registers
+$D800-$DBFF Page 216-219	Color Memory
+$DC00-$DCFF Page 220		CIA 1
+$DD00-$DDFF Page 221		CIA 2
+$DE00-$DEFF Page 222		I/O 1
+$DF00-$DFFF Page 223		I/O 2
+
+MEMORY MAP
+---------------------------------------
+$0000  
+Processor port data direction register. Bits:
+*   Bit #x: 0 = Bit #x in processor port can only be read; 1 = Bit #x in processor port can be read and written.
+Default: $2F, %00101111.
+
+$0001  
+Processor port. Bits:
+*   Bits #0-#2: Configuration for memory areas $A000-$BFFF, $D000-$DFFF and $E000-$FFFF. Values:
+    *   %x00: RAM visible in all three areas.
+    *   %x01: RAM visible at $A000-$BFFF and $E000-$FFFF.
+    *   %x10: RAM visible at $A000-$BFFF; KERNAL ROM visible at $E000-$FFFF.
+    *   %x11: BASIC ROM visible at $A000-$BFFF; KERNAL ROM visible at $E000-$FFFF.
+    *   %0xx: Character ROM visible at $D000-$DFFF. (Except for the value %000, see above.)
+    *   %1xx: I/O area visible at $D000-$DFFF. (Except for the value %100, see above.)
+*   Bit #3: Datasette output signal level.
+*   Bit #4: Datasette button status; 0 = One or more of PLAY, RECORD, F.FWD or REW pressed; 1 = No button is pressed.
+*   Bit #5: Datasette motor control; 0 = On; 1 = Off.
+Default: $37, %00110111.
+
+$0002  
+Unused.
+
+$0003-$0004  
+Unused.  
+Default: $B1AA, execution address of routine converting floating point to integer.
+
+$0005-$0006  
+Unused.  
+Default: $B391, execution address of routine converting integer to floating point.
+
+$0007  
+Byte being search for during various operations.  
+Current digit of number being input.  
+Low byte of first integer operand during AND and OR.  
+Low byte of integer-format FAC during INT().
+
+$0008  
+Byte being search for during various operations.  
+Current byte of BASIC line during tokenization.  
+High byte of first integer operand during AND and OR.
+
+$0009  
+Current column number during SPC() and TAB().
+
+$000A  
+LOAD/VERIFY switch. Values:
+*   $00: LOAD.
+*   $01-$FF: VERIFY.
+
+$000B  
+Current token during tokenization.  
+Length of BASIC line during insertion of line.  
+AND/OR switch; $00 = AND; $FF = OR.  
+Number of dimensions during array operations.
+
+$000C  
+Switch for array operations. Values:
+*   $00: Operation was not called by DIM.
+*   $40-$7F: Operation was called by DIM.
+
+$000D  
+Current expression type. Values:
+*   $00: Numerical.
+*   $FF: String.
+
+$000E  
+Current numerical expression type. Bits:
+*   Bit #7: 0 = Floating point; 1 = Integer.
+
+$000F  
+Quotation mode switch during tokenization; Bit #6: 0 = Normal mode; 1 = Quotation mode.  
+Quotation mode switch during LIST; $01 = Normal mode; $FE = Quotation mode.  
+Garbage collection indicator during memory allocation for string variable; $00-$7F = There was no garbage collection yet; $80 = Garbage collection already took place.
+
+$0010  
+Switch during fetch of variable name. Values:
+*   $00: Integer variables are accepted.
+*   $01-$FF: Integer variables are not accepted.
+
+$0011  
+GET/INPUT/READ switch. Values:
+*   $00: INPUT.
+*   $40: GET.
+*   $98: READ.
+
+$0012  
+Sign during SIN() and TAN(). Values:
+*   $00: Positive.
+*   $FF: Negative.
+
+$0013  
+Current I/O device number.  
+Default: $00, keyboard for input and screen for output.
+
+$0014-$0015  
+Line number during GOSUB, GOTO and RUN.  
+Second line number during LIST.  
+Memory address during PEEK, POKE, SYS and WAIT.
+
+$0016  
+Pointer to next expression in string stack. Values: $19; $1C; $1F; $22.  
+Default: $19.
+
+$0017-$0018  
+Pointer to previous expression in string stack.
+
+$0019-$0021  
+String stack, temporary area for processing string expressions (9 bytes, 3 entries).
+
+$0022-$0025  
+Temporary area for various operations (4 bytes).
+
+$0026-$0029  
+Auxiliary arithmetical register for division and multiplication (4 bytes).
+
+$002A  
+Unused.
+
+$002B-$002C  
+Pointer to beginning of BASIC area.  
+Default: $0801, 2049.
+
+$002D-$002E  
+Pointer to beginning of variable area. (End of program plus 1.)
+
+$002F-$0030  
+Pointer to beginning of array variable area.
+
+$0031-$0032  
+Pointer to end of array variable area.
+
+$0033-$0034  
+Pointer to beginning of string variable area. (Grows downwards from end of BASIC area.)
+
+$0035-$0036  
+Pointer to memory allocated for current string variable.
+
+$0037-$0038  
+Pointer to end of BASIC area.  
+Default: $A000, 40960.
+
+$0039-$003A  
+Current BASIC line number. Values:
+*   $0000-$F9FF, 0-63999: Line number.
+*   $FF00-$FFFF: Direct mode, no BASIC program is being executed.
+
+$003B-$003C  
+Current BASIC line number for CONT.
+
+$003D-$003E  
+Pointer to next BASIC instruction for CONT. Values:
+*   $0000-$00FF: CONT'ing is not possible.
+*   $0100-$FFFF: Pointer to next BASIC instruction.
+
+$003F-$0040  
+BASIC line number of current DATA item for READ.
+
+$0041-$0042  
+Pointer to next DATA item for READ.
+
+$0043-$0044  
+Pointer to input result during GET, INPUT and READ.
+
+$0045-$0046  
+Name and type of current variable. Bits:
+*   $0045 bits #0-#6: First character of variable name.
+*   $0046 bits #0-#6: Second character of variable name; $00 = Variable name consists of only one character.
+*   $0045 bit #7 and $0046 bit #7:
+    *   %00: Floating-point variable.
+    *   %01: String variable.
+    *   %10: FN function, created with DEF FN.
+    *   %11: Integer variable.
+
+$0047-$0048  
+Pointer to value of current variable or FN function.
+
+$0049-$004A  
+Pointer to value of current variable during LET.  
+Value of second and third parameter during WAIT.  
+Logical number and device number during OPEN.  
+$0049, 73: Logical number of CLOSE.  
+Device number of LOAD, SAVE and VERIFY.
+
+$004B-$004C  
+Temporary area for saving original pointer to current BASIC instruction during GET, INPUT and READ.
+
+$004D  
+Comparison operator indicator. Bits:
+*   Bit #1: 1 = ">" (greater than) is present in expression.
+*   Bit #2: 1 = "=" (equal to) is present in expression.
+*   Bit #3: 1 = "<" (less than) is present in expression.
+
+$004E-$004F  
+Pointer to current FN function.
+
+$0050-$0051  
+Pointer to current string variable during memory allocation.
+
+$0052  
+Unused.
+
+$0053  
+Step size of garbage collection. Values: $03; $07.
+
+$0054-$0056  
+JMP ABS machine instruction, jump to current BASIC function.  
+$0055-$0056, 85-86: Execution address of current BASIC function.
+
+$0057-$005B  
+Arithmetic register #3 (5 bytes).
+
+$005C-$0060  
+Arithmetic register #4 (5 bytes).
+
+$0061-$0065  
+FAC, arithmetic register #1 (5 bytes).
+
+$0066  
+Sign of FAC. Bits:
+*   Bit #7: 0 = Positive; 1 = Negative.
+
+$0067  
+Number of degrees during polynomial evaluation.
+
+$0068  
+Temporary area for various operations.
+
+$0069-$006D  
+ARG, arithmetic register #2 (5 bytes).
+
+$006E  
+Sign of ARG. Bits:
+*   Bit #7: 0 = Positive; 1 = Negative.
+
+$006F-$0070  
+Pointer to first string expression during string comparison.
+
+$0071-$0072  
+Auxiliary pointer during array operations.  
+Temporary area for saving original pointer to current BASIC instruction during VAL().  
+Pointer to current item of polynomial table during polynomial evaluation.
+
+$0073-$008A  
+CHRGET. Machine code routine to read next byte from BASIC program or direct command (24 bytes).  
+$0079, 121: CHRGOT. Read current byte from BASIC program or direct command.  
+$007A-$007B, 122-123: Pointer to current byte in BASIC program or direct command.
+
+$008B-$008F  
+Previous result of RND().
+
+$0090  
+Value of ST variable, device status for serial bus and datasette input/output. Serial bus bits:
+*   Bit #0: Transfer direction during which the timeout occured; 0 = Input; 1 = Output.
+*   Bit #1: 1 = Timeout occurred.
+*   Bit #4: 1 = VERIFY error occurred (only during VERIFY), the file read from the device did not match that in the memory.
+*   Bit #6: 1 = End of file has been reached.
+*   Bit #7: 1 = Device is not present.
+Datasette bits:
+*   Bit #2: 1 = Block is too short (shorter than 192 bytes).
+*   Bit #3: 1 = Block is too long (longer than 192 bytes).
+*   Bit #4: 1 = Not all bytes read with error during pass 1 could be corrected during pass 2, or a VERIFY error occurred, the file read from the device did not match that in the memory.
+*   Bit #5: 1 = Checksum error occurred.
+*   Bit #6: 1 = End of file has been reached (only during reading data files).
+
+$0091  
+Stop key indicator. Values:
+*   $7F: Stop key is pressed.
+*   $FF: Stop key is not pressed.
+
+$0092  
+Unknown. (Timing constant during datasette input.)
+
+$0093  
+LOAD/VERIFY switch. Values:
+*   $00: LOAD.
+*   $01-$FF: VERIFY.
+
+$0094  
+Serial bus output cache status. Bits:
+*   Bit #7: 1 = Output cache dirty, must transfer cache contents upon next output to serial bus.
+
+$0095  
+Serial bus output cache, previous byte to be sent to serial bus.
+
+$0096  
+Unknown. (End of tape indicator during datasette input/output.)
+
+$0097  
+Temporary area for saving original value of Y register during input from RS232.  
+Temporary area for saving original value of X register during input from datasette.
+
+$0098  
+Number of files currently open. Values: $00-$0A, 0-10.
+
+$0099  
+Current input device number.  
+Default: $00, keyboard.
+
+$009A  
+Current output device number.  
+Default: $03, screen.
+
+$009B  
+Unknown. (Parity bit during datasette input/output.)
+
+$009C  
+Unknown. (Byte ready indicator during datasette input/output.)
+
+$009D  
+System error display switch. Bits:
+*   Bit #6: 0 = Suppress I/O error messages; 1 = Display them.
+*   Bit #7: 0 = Suppress system messages; 1 = Display them.
+
+$009E  
+Byte to be put into output buffer during RS232 and datasette output.  
+Block header type during datasette input/output.  
+Length of file name during datasette input/output.  
+Error counter during LOAD from datasette. Values: $00-$3E, 0-62.
+
+$009F  
+Auxiliary counter for writing file name into datasette buffer.  
+Auxiliary counter for comparing requested file name with file name read from datasette during datasette input.  
+Error correction counter during LOAD from datasette. Values: $00-$3E, 0-62.
+
+$00A0-$00A2  
+Value of TI variable, time of day, increased by 1 every 1/60 second (on PAL machines). Values: $000000-$4F19FF, 0-518399 (on PAL machines).
+
+$00A3  
+EOI switch during serial bus output. Bits:
+*   Bit #7: 0 = Send byte right after handshake; 1 = Do EOI delay first.
+
+Bit counter during datasette output.
+
+$00A4  
+Byte buffer during serial bus input.  
+Parity during datasette input/output.
+
+$00A5  
+Bit counter during serial bus input/output.  
+Counter for sync mark during datasette output.
+
+$00A6  
+Offset of current byte in datasette buffer.
+
+$00A7  
+Bit buffer during RS232 input.
+
+$00A8  
+Bit counter during RS232 input.
+
+$00A9  
+Stop bit switch during RS232 input. Values:
+*   $00: Data bit.
+*   $01-$FF: Stop bit.
+
+$00AA  
+Byte buffer during RS232 input.
+
+$00AB  
+Parity during RS232 input.  
+Computed block checksum during datasette input.
+
+$00AC-$00AD  
+Start address for SAVE to serial bus.  
+Pointer to current byte during SAVE to serial bus or datasette.  
+Pointer to line in screen memory to be scrolled during scrolling the screen.
+
+$00AE-$00AF  
+Load address read from input file and pointer to current byte during LOAD/VERIFY from serial bus.  
+End address after LOAD/VERIFY from serial bus or datasette.  
+End address for SAVE to serial bus or datasette.  
+Pointer to line in Color RAM to be scrolled during scrolling the screen.
+
+$00B0-$00B1  
+Unknown.
+
+$00B2-$00B3  
+Pointer to datasette buffer.  
+Default: $033C, 828.
+
+$00B4  
+Bit counter and stop bit switch during RS232 output. Bits:
+*   Bits #0-#6: Bit count.
+*   Bit #7: 0 = Data bit; 1 = Stop bit.
+Bit counter during datasette input/output.
+
+$00B5  
+Bit buffer (in bit #2) during RS232 output.
+
+$00B6  
+Byte buffer during RS232 output.
+
+$00B7  
+Length of file name or disk command; first parameter of LOAD, SAVE and VERIFY or fourth parameter of OPEN. Values:
+*   $00: No parameter.
+*   $01-$FF: Parameter length.
+
+$00B8  
+Logical number of current file.
+
+$00B9  
+Secondary address of current file.
+
+$00BA  
+Device number of current file.
+
+$00BB-$00BC  
+Pointer to current file name or disk command; first parameter of LOAD, SAVE and VERIFY or fourth parameter of OPEN.
+
+$00BD  
+Parity during RS232 output.  
+Byte buffer during datasette input/output.
+
+$00BE  
+Block counter during datasette input/output.
+
+$00BF  
+Unknown.
+
+$00C0  
+Datasette motor switch. Values:
+*   $00: No button was pressed, motor has been switched off. If a button is pressed on the datasette, must switch motor on.
+*   $01-$FF: Motor is on.
+
+$00C1-$00C2  
+Start address during SAVE to serial bus, LOAD and VERIFY from datasette and SAVE to datasette.  
+Pointer to current byte during memory test.
+
+$00C3-$00C4  
+Start address for a secondary address of 0 for LOAD and VERIFY from serial bus or datasette.  
+Pointer to ROM table of default vectors during initialization of I/O vectors.
+
+$00C5  
+Matrix code of key previously pressed. Values:
+*   $00-$3F: Keyboard matrix code.
+*   $40: No key was pressed at the time of previous check.
+
+$00C6  
+Length of keyboard buffer. Values:
+*   $00, 0: Buffer is empty.
+*   $01-$0A, 1-10: Buffer length.
+
+$00C7  
+Reverse mode switch. Values:
+*   $00: Normal mode.
+*   $12: Reverse mode.
+
+$00C8  
+Length of line minus 1 during screen input. Values: $27, 39; $4F, 79.
+
+$00C9  
+Cursor row during screen input. Values: $00-$18, 0-24.
+
+$00CA  
+Cursor column during screen input. Values: $00-$27, 0-39.
+
+$00CB  
+Matrix code of key currently being pressed. Values:
+*   $00-$3F: Keyboard matrix code.
+*   $40: No key is currently pressed.
+
+$00CC  
+Cursor visibility switch. Values:
+*   $00: Cursor is on.
+*   $01-$FF: Cursor is off.
+
+$00CD  
+Delay counter for changing cursor phase. Values:
+*   $00, 0: Must change cursor phase.
+*   $01-$14, 1-20: Delay.
+
+$00CE  
+Screen code of character under cursor.
+
+$00CF  
+Cursor phase switch. Values:
+*   $00: Cursor off phase, original character visible.
+*   $01: Cursor on phase, reverse character visible.
+
+$00D0  
+End of line switch during screen input. Values:
+*   $00: Return character reached, end of line.
+*   $01-$FF: Still reading characters from line.
+
+$00D1-$00D2  
+Pointer to current line in screen memory.
+
+$00D3  
+Current cursor column. Values: $00-$27, 0-39.
+
+$00D4  
+Quotation mode switch. Values:
+*   $00: Normal mode.
+*   $01: Quotation mode.
+
+$00D5  
+Length of current screen line minus 1. Values: $27, 39; $4F, 79.
+
+$00D6  
+Current cursor row. Values: $00-$18, 0-24.
+
+$00D7  
+PETSCII code of character during screen input/output.  
+Bit buffer during datasette input.  
+Block checksum during datasette output.
+
+$00D8  
+Number of insertions. Values:
+*   $00: No insertions made, normal mode, control codes change screen layout or behavior.
+*   $01-$FF: Number of insertions, when inputting this many character next, those must be turned into control codes, similarly to quotation mode.
+
+$00D9-$00F1  
+High byte of pointers to each line in screen memory (25 bytes). Values:
+*   $00-$7F: Pointer high byte.
+*   $80-$FF: No pointer, line is an extension of previous line on screen.
+
+$00F2  
+Temporary area during scrolling the screen.
+
+$00F3-$00F4  
+Pointer to current line in Color RAM.
+
+$00F5-$00F6  
+Pointer to current conversion table during conversion from keyboard matrix codes to PETSCII codes.
+
+$00F7-$00F8  
+Pointer to RS232 input buffer. Values:
+*   $0000-$00FF: No buffer defined, a new buffer must be allocated upon RS232 input.
+*   $0100-$FFFF: Buffer pointer.
+
+$00F9-$00FA  
+Pointer to RS232 output buffer. Values:
+*   $0000-$00FF: No buffer defined, a new buffer must be allocated upon RS232 output.
+*   $0100-$FFFF: Buffer pointer.
+
+$00FB-$00FE  
+Unused (4 bytes).
+
+$00FF-$010A  
+Buffer for conversion from floating point to string (12 bytes.)
+
+$0100-$01FF
+Processor stack**
+
+$00FF-$010A  
+Buffer for conversion from floating point to string (12 bytes.)
+
+$0100-$013D  
+Pointers to bytes read with error during datasette input (62 bytes, 31 entries).
+
+$0100-$01FF  
+Processor stack. Also used for storing data related to FOR and GOSUB.
+
+$0200-$0258  
+Input buffer, storage area for data read from screen (89 bytes).
+
+$0259-$0262  
+Logical numbers assigned to files (10 bytes, 10 entries).
+
+$0263-$026C  
+Device numbers assigned to files (10 bytes, 10 entries).
+
+$026D-$0276  
+Secondary addresses assigned to files (10 bytes, 10 entries).
+
+$0277-$0280  
+Keyboard buffer (10 bytes, 10 entries).
+
+$0281-$0282  
+Pointer to beginning of BASIC area after memory test.  
+Default: $0800, 2048.
+
+$0283-$0284  
+Pointer to end of BASIC area after memory test.  
+Default: $A000, 40960.
+
+$0285  
+Unused. (Serial bus timeout.)
+
+$0286  
+Current color, cursor color. Values: $00-$0F, 0-15.
+
+$0287  
+Color of character under cursor. Values: $00-$0F, 0-15.
+
+$0288  
+High byte of pointer to screen memory for screen input/output.  
+Default: $04, $0400, 1024.
+
+$0289  
+Maximum length of keyboard buffer. Values:
+*   $00, 0: No buffer.
+*   $01-$0F, 1-15: Buffer size.
+
+$028A  
+Keyboard repeat switch. Bits:
+*   Bits #6-#7: %00 = Only cursor up/down, cursor left/right, Insert/Delete and Space repeat; %01 = No key repeats; %1x = All keys repeat.
+
+$028B  
+Delay counter during repeat sequence, for delaying between successive repeats. Values:
+*   $00, 0: Must repeat key.
+*   $01-$04, 1-4: Delay repetition.
+
+$028C  
+Repeat sequence delay counter, for delaying before first repetition. Values:
+*   $00, 0: Must start repeat sequence.
+*   $01-$10, 1-16: Delay repeat sequence.
+
+$028D  
+Shift key indicator. Bits:
+*   Bit #0: 1 = One or more of left Shift, right Shift or Shift Lock is currently being pressed or locked.
+*   Bit #1: 1 = Commodore is currently being pressed.
+*   Bit #2: 1 = Control is currently being pressed.
+
+$028E  
+Previous value of shift key indicator. Bits:
+*   Bit #0: 1 = One or more of left Shift, right Shift or Shift Lock was pressed or locked at the time of previous check.
+*   Bit #1: 1 = Commodore was pressed at the time of previous check.
+*   Bit #2: 1 = Control was pressed at the time of previous check.
+
+$028F-$0290  
+Execution address of routine that, based on the status of shift keys, sets the pointer at memory address $00F5-$00F6 to the appropriate conversion table for converting keyboard matrix codes to PETSCII codes.  
+Default: $EB48.
+
+$0291  
+Commodore-Shift switch. Bits:
+*   Bit #7: 0 = Commodore-Shift is enabled, the key combination will toggle between the uppercase/graphics and lowercase/uppercase character set; 1 = Commodore-Shift is disabled.
+
+$0292  
+Scroll direction switch during scrolling the screen. Values:
+*   $00: Insertion of line before current line, current line and all lines below it must be scrolled 1 line downwards.
+*   $01-$FF: Bottom of screen reached, complete screen must be scrolled 1 line upwards.
+
+$0293  
+RS232 control register. Bits:
+*   Bits #0-#3: Baud rate, transfer speed. Values:
+    *   %0000: User specified.
+    *   %0001: 50 bit/s.
+    *   %0010: 75 bit/s.
+    *   %0011: 110 bit/s.
+    *   %0100: 150 bit/s.
+    *   %0101: 300 bit/s.
+    *   %0110: 600 bit/s.
+    *   %0111: 1200 bit/s.
+    *   %1000: 2400 bit/s.
+    *   %1001: 1800 bit/s.
+    *   %1010: 2400 bit/s.
+    *   %1011: 3600 bit/s.
+    *   %1100: 4800 bit/s.
+    *   %1101: 7200 bit/s.
+    *   %1110: 9600 bit/s.
+    *   %1111: 19200 bit/s.
+*   Bits #5-#6: Byte size, number of data bits per byte; %00 = 8; %01 = 7, %10 = 6; %11 = 5.
+*   Bit #7: Number of stop bits; 0 = 1 stop bit; 1 = 2 stop bits.
+
+$0294  
+RS232 command register. Bits:
+*   Bit #0: Synchronization type; 0 = 3 lines; 1 = X lines.
+*   Bit #4: Transmission type; 0 = Duplex; 1 = Half duplex.
+*   Bits #5-#7: Parity mode. Values:
+    *   %xx0: No parity check, bit #7 does not exist.
+    *   %001: Odd parity.
+    *   %011: Even parity.
+    *   %101: No parity check, bit #7 is always 1.
+    *   %111: No parity check, bit #7 is always 0.
+
+$0295-$0296  
+Default value of RS232 output timer, based on baud rate. (Must be filled with actual value before RS232 input/output if baud rate is "user specified" in RS232 control register, memory address $0293.)
+
+$0297  
+Value of ST variable, device status for RS232 input/output. Bits:
+*   Bit #0: 1 = Parity error occurred.
+*   Bit #1: 1 = Frame error, a stop bit with the value of 0, occurred.
+*   Bit #2: 1 = Input buffer underflow occurred, too much data has arrived but it has not been read from the buffer in time.
+*   Bit #3: 1 = Input buffer is empty, nothing to read.
+*   Bit #4: 0 = Sender is Clear To Send; 1 = Sender is not ready to send data to receiver.
+*   Bit #6: 0 = Receiver reports Data Set Ready; 1 = Receiver is not ready to receive data.
+*   Bit #7: 1 = Carrier loss, a stop bit and a data byte both with the value of 0, detected.
+
+$0298  
+RS232 byte size, number of data bits per data byte, default value for bit counters.
+
+$0299-$029A  
+Default value of RS232 input timer, based on baud rate. (Calculated automatically from default value of RS232 output timer, at memory address $0295-$0296.)
+
+$029B  
+Offset of byte received in RS232 input buffer.
+
+$029C  
+Offset of current byte in RS232 input buffer.
+
+$029D  
+Offset of byte to send in RS232 output buffer.
+
+$029E  
+Offset of current byte in RS232 output buffer.
+
+$029F-$02A0  
+Temporary area for saving pointer to original interrupt service routine during datasette input output. Values:
+*   $0000-$00FF: No datasette input/output took place yet or original pointer has been already restored.
+*   $0100-$FFFF: Original pointer, datasette input/output currently in progress.
+
+$02A1  
+Temporary area for saving original value of CIA#2 interrupt control register, at memory address $DD0D, during RS232 input/output.
+
+$02A2  
+Temporary area for saving original value of CIA#1 timer #1 control register, at memory address $DC0E, during datasette input/output.
+
+$02A3  
+Temporary area for saving original value of CIA#1 interrupt control register, at memory address $DC0D, during datasette input/output.
+
+$02A4  
+Temporary area for saving original value of CIA#1 timer #1 control register, at memory address $DC0E, during datasette input/output.
+
+$02A5  
+Number of line currently being scrolled during scrolling the screen.
+
+$02A6  
+PAL/NTSC switch, for selecting RS232 baud rate from the proper table. Values:
+*   $00: NTSC.
+*   $01: PAL.
+
+$02A7-$02FF  
+Unused (89 bytes).
+
+$0300-$0301  
+Execution address of warm reset, displaying optional BASIC error message and entering BASIC idle loop.  
+Default: $E38B.
+
+$0302-$0303  
+Execution address of BASIC idle loop.  
+Default: $A483.
+
+$0304-$0305  
+Execution address of BASIC line tokenizater routine.  
+Default: $A57C.
+
+$0306-$0307  
+Execution address of BASIC token decoder routine.  
+Default: $A71A.
+
+$0308-$0309  
+Execution address of BASIC instruction executor routine.  
+Default: $A7E4.
+
+$030A-$030B  
+Execution address of routine reading next item of BASIC expression.  
+Default: $AE86.
+
+$030C  
+Default value of register A for SYS.  
+
+$030D  
+Default value of register X for SYS.  
+
+$030E  
+Default value of register Y for SYS.  
+
+$030F  
+Default value of status register for SYS.  
+
+$0310-$0312  
+JMP ABS machine instruction, jump to USR() function.  
+$0311-$0312, 785-786: Execution address of USR() function.
+
+$0313  
+Unused.
+
+$0314-$0315  
+Execution address of interrupt service routine.  
+Default: $EA31.
+
+$0316-$0317  
+Execution address of BRK service routine.  
+Default: $FE66.
+
+$0318-$0319  
+Execution address of non-maskable interrupt service routine.  
+Default: $FE47.
+
+$031A-$031B  
+Execution address of OPEN, routine opening files.  
+Default: $F34A.
+
+$031C-$031D  
+Execution address of CLOSE, routine closing files.  
+Default: $F291.
+
+$031E-$031F  
+Execution address of CHKIN, routine defining file as default input.  
+Default: $F20E.
+
+$0320-$0321  
+Execution address of CHKOUT, routine defining file as default output.  
+Default: $F250.
+
+$0322-$0323  
+Execution address of CLRCHN, routine initializating input/output.  
+Default: $F333.
+
+$0324-$0325  
+Execution address of CHRIN, data input routine, except for keyboard and RS232 input.  
+Default: $F157.
+
+$0326-$0327  
+Execution address of CHROUT, general purpose data output routine.  
+Default: $F1CA.
+
+$0328-$0329  
+Execution address of STOP, routine checking the status of Stop key indicator, at memory address $0091.  
+Default: $F6ED.
+
+$032A-$032B  
+Execution address of GETIN, general purpose data input routine.  
+Default: $F13E.
+
+$032C-$032D  
+Execution address of CLALL, routine initializing input/output and clearing all file assignment tables.  
+Default: $F32F.
+
+$032E-$032F  
+Unused.  
+Default: $FE66.
+
+$0330-$0331  
+Execution address of LOAD, routine loading files.  
+Default: $F4A5.
+
+$0332-$0333  
+Execution address of SAVE, routine saving files.  
+Default: $F5ED.
+
+$0334-$033B  
+Unused (8 bytes).
+
+$033C-$03FB  
+Datasette buffer (192 bytes).
+
+$03FC-$03FF  
+Unused (4 bytes).
+
+$0400-$07E7  
+Default area of screen memory (1000 bytes).
+
+$07E8-$07F7  
+Unused (16 bytes).
+
+$07F8-$07FF  
+Default area for sprite pointers (8 bytes).
+
+$0800  
+Unused. (Must contain a value of 0 so that the BASIC program can be RUN.)
+
+$0801-$9FFF  
+Default BASIC area (38911 bytes).
+
+$8000-$9FFF  
+Optional cartridge ROM (8192 bytes).  
+$8000-$8001, 32768-32769: Execution address of cold reset.  
+$8002-$8003, 32770-32771: Execution address of non-maskable interrupt service routine.  
+$8004-$8008, 32772-32776: Cartridge signature. If contains the uppercase PETSCII string "CBM80" ($C3,$C2,$CD,$38,$30) then the routine vectors are accepted by the KERNAL.
+
+$A000-$BFFF  
+BASIC ROM or RAM area (8192 bytes); depends on the value of bits #0-#2 of the processor port at memory address $0001:
+*   %x00, %x01 or %x10: RAM area.
+*   %x11: BASIC ROM.
+    
+$C000-$CFFF  
+Upper RAM area (4096 bytes).
+
+$D000-$DFFF
+I/O Area
+
+$D000-$DFFF  
+I/O Area (memory mapped chip registers), Character ROM or RAM area (4096 bytes); depends on the value of bits #0-#2 of the processor port at memory address $0001:
+*   %x00: RAM area.
+*   %0xx: Character ROM. (Except for the value %000, see above.)
+*   %1xx: I/O Area. (Except for the value %100, see above.)
+
+$D000-$DFFF  
+Character ROM, shape of characters (4096 bytes).
+
+$D000-$D7FF  
+Shape of characters in uppercase/graphics character set (2048 bytes, 256 entries).
+
+$D800-$DFFF  
+Shape of characters in lowercase/uppercase character set (2048 bytes, 256 entries).
+
+$D000-$D3FF
+VIC-II; video display**
+
+$D000  
+Sprite #0 X-coordinate (only bits #0-#7).
+
+$D001  
+Sprite #0 Y-coordinate.
+
+$D002  
+Sprite #1 X-coordinate (only bits #0-#7).
+
+$D003  
+Sprite #1 Y-coordinate.
+
+$D004  
+Sprite #2 X-coordinate (only bits #0-#7).
+
+$D005  
+Sprite #2 Y-coordinate.
+
+$D006  
+Sprite #3 X-coordinate (only bits #0-#7).
+
+$D007  
+Sprite #3 Y-coordinate.
+
+$D008  
+Sprite #4 X-coordinate (only bits #0-#7).
+
+$D009  
+Sprite #4 Y-coordinate.
+
+$D00A  
+Sprite #5 X-coordinate (only bits #0-#7).
+
+$D00B  
+Sprite #5 Y-coordinate.
+
+$D00C  
+Sprite #6 X-coordinate (only bits #0-#7).
+
+$D00D  
+Sprite #6 Y-coordinate.
+
+$D00E  
+Sprite #7 X-coordinate (only bits #0-#7).
+
+$D00F  
+Sprite #7 Y-coordinate.
+
+$D010  
+Sprite #0-#7 X-coordinates (bit #8). Bits:
+*   Bit #x: Sprite #x X-coordinate bit #8.
+
+$D011  
+Screen control register #1. Bits:
+*   Bits #0-#2: Vertical raster scroll.
+*   Bit #3: Screen height; 0 = 24 rows; 1 = 25 rows.
+*   Bit #4: 0 = Screen off, complete screen is covered by border; 1 = Screen on, normal screen contents are visible.
+*   Bit #5: 0 = Text mode; 1 = Bitmap mode.
+*   Bit #6: 1 = Extended background mode on.
+*   Bit #7: Read: Current raster line (bit #8).  
+    Write: Raster line to generate interrupt at (bit #8).
+Default: $1B, %00011011.
+
+$D012  
+Read: Current raster line (bits #0-#7).  
+Write: Raster line to generate interrupt at (bits #0-#7).
+
+$D013 Read-only.
+Light pen X-coordinate (bits #1-#8).  
+
+$D014 Read-only.
+Light pen Y-coordinate.  
+
+$D015  
+Sprite enable register. Bits:
+*   Bit #x: 1 = Sprite #x is enabled, drawn onto the screen.
+
+$D016  
+Screen control register #2. Bits:
+*   Bits #0-#2: Horizontal raster scroll.
+*   Bit #3: Screen width; 0 = 38 columns; 1 = 40 columns.
+*   Bit #4: 1 = Multicolor mode on.
+Default: $C8, %11001000.
+
+$D017  
+Sprite double height register. Bits:
+*   Bit #x: 1 = Sprite #x is stretched to double height.
+
+$D018  
+Memory setup register. Bits:
+*   Bits #1-#3: In text mode, pointer to character memory (bits #11-#13), relative to VIC bank, memory address $DD00. Values:
+    *   %000, 0: $0000-$07FF, 0-2047.
+    *   %001, 1: $0800-$0FFF, 2048-4095.
+    *   %010, 2: $1000-$17FF, 4096-6143.
+    *   %011, 3: $1800-$1FFF, 6144-8191.
+    *   %100, 4: $2000-$27FF, 8192-10239.
+    *   %101, 5: $2800-$2FFF, 10240-12287.
+    *   %110, 6: $3000-$37FF, 12288-14335.
+    *   %111, 7: $3800-$3FFF, 14336-16383.
+    
+    Values %010 and %011 in VIC bank #0 and #2 select Character ROM instead.  
+    In bitmap mode, pointer to bitmap memory (bit #13), relative to VIC bank, memory address $DD00. Values:
+    
+    *   %0xx, 0: $0000-$1FFF, 0-8191.
+    *   %1xx, 4: $2000-$3FFF, 8192-16383.
+*   Bits #4-#7: Pointer to screen memory (bits #10-#13), relative to VIC bank, memory address $DD00. Values:
+    *   %0000, 0: $0000-$03FF, 0-1023.
+    *   %0001, 1: $0400-$07FF, 1024-2047.
+    *   %0010, 2: $0800-$0BFF, 2048-3071.
+    *   %0011, 3: $0C00-$0FFF, 3072-4095.
+    *   %0100, 4: $1000-$13FF, 4096-5119.
+    *   %0101, 5: $1400-$17FF, 5120-6143.
+    *   %0110, 6: $1800-$1BFF, 6144-7167.
+    *   %0111, 7: $1C00-$1FFF, 7168-8191.
+    *   %1000, 8: $2000-$23FF, 8192-9215.
+    *   %1001, 9: $2400-$27FF, 9216-10239.
+    *   %1010, 10: $2800-$2BFF, 10240-11263.
+    *   %1011, 11: $2C00-$2FFF, 11264-12287.
+    *   %1100, 12: $3000-$33FF, 12288-13311.
+    *   %1101, 13: $3400-$37FF, 13312-14335.
+    *   %1110, 14: $3800-$3BFF, 14336-15359.
+    *   %1111, 15: $3C00-$3FFF, 15360-16383.
+
+$D019  
+Interrupt status register.
+Read bits:
+*   Bit #0: 1 = Current raster line is equal to the raster line to generate interrupt at.
+*   Bit #1: 1 = Sprite-background collision occurred.
+*   Bit #2: 1 = Sprite-sprite collision occurred.
+*   Bit #3: 1 = Light pen signal arrived.
+*   Bit #7: 1 = An event (or more events), that may generate an interrupt, occurred and it has not been (not all of them have been) acknowledged yet.
+Write bits:
+*   Bit #0: 1 = Acknowledge raster interrupt.
+*   Bit #1: 1 = Acknowledge sprite-background collision interrupt.
+*   Bit #2: 1 = Acknowledge sprite-sprite collision interrupt.
+*   Bit #3: 1 = Acknowledge light pen interrupt.
+
+$D01A  
+Interrupt control register. Bits:
+*   Bit #0: 1 = Raster interrupt enabled.
+*   Bit #1: 1 = Sprite-background collision interrupt enabled.
+*   Bit #2: 1 = Sprite-sprite collision interrupt enabled.
+*   Bit #3: 1 = Light pen interrupt enabled.
+
+$D01B  
+Sprite priority register. Bits:
+*   Bit #x: 0 = Sprite #x is drawn in front of screen contents; 1 = Sprite #x is behind screen contents.
+
+$D01C  
+Sprite multicolor mode register. Bits:
+*   Bit #x: 0 = Sprite #x is single color; 1 = Sprite #x is multicolor.
+
+$D01D  
+Sprite double width register. Bits:
+*   Bit #x: 1 = Sprite #x is stretched to double width.
+
+$D01E  
+Sprite-sprite collision register. Read bits:
+*   Bit #x: 1 = Sprite #x collided with another sprite.
+Write: Enable further detection of sprite-sprite collisions.
+
+$D01F  
+Sprite-background collision register. Read bits:
+*   Bit #x: 1 = Sprite #x collided with background.
+
+Write: Enable further detection of sprite-background collisions.
+
+$D020  
+Border color (only bits #0-#3).
+
+$D021  
+Background color (only bits #0-#3).
+
+$D022  
+Extra background color #1 (only bits #0-#3).
+
+$D023  
+Extra background color #2 (only bits #0-#3).
+
+$D024  
+Extra background color #3 (only bits #0-#3).
+
+$D025  
+Sprite extra color #1 (only bits #0-#3).
+
+$D026  
+Sprite extra color #1 (only bits #0-#3).
+
+$D027  
+Sprite #0 color (only bits #0-#3).
+
+$D028  
+Sprite #1 color (only bits #0-#3).
+
+$D029  
+Sprite #2 color (only bits #0-#3).
+
+$D02A  
+Sprite #3 color (only bits #0-#3).
+
+$D02B  
+Sprite #4 color (only bits #0-#3).
+
+$D02C  
+Sprite #5 color (only bits #0-#3).
+
+$D02D  
+Sprite #6 color (only bits #0-#3).
+
+$D02E  
+Sprite #7 color (only bits #0-#3).
+
+$D02F-$D03F  
+Unusable (17 bytes).
+
+$D040-$D3FF  
+VIC-II register images (repeated every $40, 64 bytes).
+
+$D400-$D7FF, 54272-55295  
+SID; audio
+
+$D400-$D401 Write-only.
+Voice #1 frequency.  
+
+$D402-$D403 Write-only.
+Voice #1 pulse width.  
+
+$D404 Write-only.
+Voice #1 control register. Bits:
+*   Bit #0: 0 = Voice off, Release cycle; 1 = Voice on, Attack-Decay-Sustain cycle.
+*   Bit #1: 1 = Synchronization enabled.
+*   Bit #2: 1 = Ring modulation enabled.
+*   Bit #3: 1 = Disable voice, reset noise generator.
+*   Bit #4: 1 = Triangle waveform enabled.
+*   Bit #5: 1 = Saw waveform enabled.
+*   Bit #6: 1 = Rectangle waveform enabled.
+*   Bit #7: 1 = Noise enabled.
+
+$D405 Write-only.
+Voice #1 Attack and Decay length. Bits:
+*   Bits #0-#3: Decay length. Values:
+    *   %0000, 0: 6 ms.
+    *   %0001, 1: 24 ms.
+    *   %0010, 2: 48 ms.
+    *   %0011, 3: 72 ms.
+    *   %0100, 4: 114 ms.
+    *   %0101, 5: 168 ms.
+    *   %0110, 6: 204 ms.
+    *   %0111, 7: 240 ms.
+    *   %1000, 8: 300 ms.
+    *   %1001, 9: 750 ms.
+    *   %1010, 10: 1.5 s.
+    *   %1011, 11: 2.4 s.
+    *   %1100, 12: 3 s.
+    *   %1101, 13: 9 s.
+    *   %1110, 14: 15 s.
+    *   %1111, 15: 24 s.
+*   Bits #4-#7: Attack length. Values:
+    *   %0000, 0: 2 ms.
+    *   %0001, 1: 8 ms.
+    *   %0010, 2: 16 ms.
+    *   %0011, 3: 24 ms.
+    *   %0100, 4: 38 ms.
+    *   %0101, 5: 56 ms.
+    *   %0110, 6: 68 ms.
+    *   %0111, 7: 80 ms.
+    *   %1000, 8: 100 ms.
+    *   %1001, 9: 250 ms.
+    *   %1010, 10: 500 ms.
+    *   %1011, 11: 800 ms.
+    *   %1100, 12: 1 s.
+    *   %1101, 13: 3 s.
+    *   %1110, 14: 5 s.
+    *   %1111, 15: 8 s.
+
+$D406 Write-only.
+Voice #1 Sustain volume and Release length. Bits:
+*   Bits #0-#3: Release length. Values:
+    *   %0000, 0: 6 ms.
+    *   %0001, 1: 24 ms.
+    *   %0010, 2: 48 ms.
+    *   %0011, 3: 72 ms.
+    *   %0100, 4: 114 ms.
+    *   %0101, 5: 168 ms.
+    *   %0110, 6: 204 ms.
+    *   %0111, 7: 240 ms.
+    *   %1000, 8: 300 ms.
+    *   %1001, 9: 750 ms.
+    *   %1010, 10: 1.5 s.
+    *   %1011, 11: 2.4 s.
+    *   %1100, 12: 3 s.
+    *   %1101, 13: 9 s.
+    *   %1110, 14: 15 s.
+    *   %1111, 15: 24 s.
+*   Bits #4-#7: Sustain volume.
+
+$D407-$D408 Write-only.
+Voice #2 frequency.  
+
+$D409-$D40A Write-only.
+Voice #2 pulse width.  
+
+$D40B Write-only.
+Voice #2 control register.  
+
+$D40C Write-only.
+Voice #2 Attack and Decay length.  
+
+$D40D Write-only.
+Voice #2 Sustain volume and Release length.  
+
+$D40E-$D40F Write-only.
+Voice #3 frequency.  
+
+$D410-$D411 Write-only.
+Voice #3 pulse width.  
+
+$D412 Write-only.
+Voice #3 control register.  
+
+$D413 Write-only.
+Voice #3 Attack and Decay length.
+
+$D414 Write-only.
+Voice #3 Sustain volume and Release length.  
+
+$D415 Write-only.
+Filter cut off frequency (bits #0-#2).  
+
+$D416 Write-only.
+Filter cut off frequency (bits #3-#10).  
+
+$D417 Write-only.
+Filter control. Bits:
+*   Bit #0: 1 = Voice #1 filtered.
+*   Bit #1: 1 = Voice #2 filtered.
+*   Bit #2: 1 = Voice #3 filtered.
+*   Bit #3: 1 = External voice filtered.
+*   Bits #4-#7: Filter resonance.
+
+$D418 Write-only.
+Volume and filter modes. Bits:
+*   Bits #0-#3: Volume.
+*   Bit #4: 1 = Low pass filter enabled.
+*   Bit #5: 1 = Band pass filter enabled.
+*   Bit #6: 1 = High pass filter enabled.
+*   Bit #7: 1 = Voice #3 disabled.
+
+$D419 Read-only.
+X value of paddle selected at memory address $DC00. (Updates at every 512 system cycles.)
+
+$D41A Read-only.
+Y value of paddle selected at memory address $DC00. (Updates at every 512 system cycles.)
+
+$D41B Read-only.
+Voice #3 waveform output.
+
+$D41C Read-only.
+Voice #3 ADSR output.
+
+$D41D-$D41F  
+Unusable (3 bytes).
+
+$D420-$D7FF  
+SID register images (repeated every $20, 32 bytes).
+
+$D800-$DBFF
+Color RAM
+
+$D800-$DBE7  
+Color RAM (1000 bytes, only bits #0-#3).
+
+$DBE8-$DBFF  
+Unused (24 bytes, only bits #0-#3).
+
+$DC00-$DCFF
+CIA#1; inputs (keyboard, joystick, mouse), datasette, IRQ control
+
+$DC00  
+Port A, keyboard matrix columns and joystick #2. Read bits:
+*   Bit #0: 0 = Port 2 joystick up pressed.
+*   Bit #1: 0 = Port 2 joystick down pressed.
+*   Bit #2: 0 = Port 2 joystick left pressed.
+*   Bit #3: 0 = Port 2 joystick right pressed.
+*   Bit #4: 0 = Port 2 joystick fire pressed.
+Write bits:
+*   Bit #x: 0 = Select keyboard matrix column #x.
+*   Bits #6-#7: Paddle selection; %01 = Paddle #1; %10 = Paddle #2.
+
+$DC01  
+Port B, keyboard matrix rows and joystick #1. Bits:
+*   Bit #x: 0 = A key is currently being pressed in keyboard matrix row #x, in the column selected at memory address $DC00.
+*   Bit #0: 0 = Port 1 joystick up pressed.
+*   Bit #1: 0 = Port 1 joystick down pressed.
+*   Bit #2: 0 = Port 1 joystick left pressed.
+*   Bit #3: 0 = Port 1 joystick right pressed.
+*   Bit #4: 0 = Port 1 joystick fire pressed.
+
+$DC02  
+Port A data direction register.
+*   Bit #x: 0 = Bit #x in port A can only be read; 1 = Bit #x in port A can be read and written.
+
+$DC03  
+Port B data direction register.
+*   Bit #x: 0 = Bit #x in port B can only be read; 1 = Bit #x in port B can be read and written.
+
+$DC04-$DC05  
+Timer A. Read: Current timer value.  
+Write: Set timer start value.
+
+$DC06-$DC07  
+Timer B. Read: Current timer value.  
+Write: Set timer start value.
+
+$DC08  
+Time of Day, tenth seconds (in BCD). Values: $00-$09. Read: Current TOD value.  
+Write: Set TOD or alarm time.
+
+$DC09  
+Time of Day, seconds (in BCD). Values: $00-$59. Read: Current TOD value.  
+Write: Set TOD or alarm time.
+
+$DC0A  
+Time of Day, minutes (in BCD). Values: $00-$59. Read: Current TOD value.  
+Write: Set TOD or alarm time.
+
+$DC0B  
+Time of Day, hours (in BCD). Read bits:
+*   Bits #0-#5: Hours.
+*   Bit #7: 0 = AM; 1 = PM.
+Write: Set TOD or alarm time.
+
+$DC0C  
+Serial shift register. (Bits are read and written upon every positive edge of the CNT pin.)
+
+$DC0D  
+Interrupt control and status register. Read bits:
+*   Bit #0: 1 = Timer A underflow occurred.
+*   Bit #1: 1 = Timer B underflow occurred.
+*   Bit #2: 1 = TOD is equal to alarm time.
+*   Bit #3: 1 = A complete byte has been received into or sent from serial shift register.
+*   Bit #4: Signal level on FLAG pin, datasette input.
+*   Bit #7: An interrupt has been generated.
+Write bits:
+*   Bit #0: 1 = Enable interrupts generated by timer A underflow.
+*   Bit #1: 1 = Enable interrupts generated by timer B underflow.
+*   Bit #2: 1 = Enable TOD alarm interrupt.
+*   Bit #3: 1 = Enable interrupts generated by a byte having been received/sent via serial shift register.
+*   Bit #4: 1 = Enable interrupts generated by positive edge on FLAG pin.
+*   Bit #7: Fill bit; bits #0-#6, that are set to 1, get their values from this bit; bits #0-#6, that are set to 0, are left unchanged.
+
+$DC0E  
+Timer A control register. Bits:
+*   Bit #0: 0 = Stop timer; 1 = Start timer.
+*   Bit #1: 1 = Indicate timer underflow on port B bit #6.
+*   Bit #2: 0 = Upon timer underflow, invert port B bit #6; 1 = upon timer underflow, generate a positive edge on port B bit #6 for 1 system cycle.
+*   Bit #3: 0 = Timer restarts upon underflow; 1 = Timer stops upon underflow.
+*   Bit #4: 1 = Load start value into timer.
+*   Bit #5: 0 = Timer counts system cycles; 1 = Timer counts positive edges on CNT pin.
+*   Bit #6: Serial shift register direction; 0 = Input, read; 1 = Output, write.
+*   Bit #7: TOD speed; 0 = 60 Hz; 1 = 50 Hz.
+
+$DC0F  
+Timer B control register. Bits:
+*   Bit #0: 0 = Stop timer; 1 = Start timer.
+*   Bit #1: 1 = Indicate timer underflow on port B bit #7.
+*   Bit #2: 0 = Upon timer underflow, invert port B bit #7; 1 = upon timer underflow, generate a positive edge on port B bit #7 for 1 system cycle.
+*   Bit #3: 0 = Timer restarts upon underflow; 1 = Timer stops upon underflow.
+*   Bit #4: 1 = Load start value into timer.
+*   Bits #5-#6: %00 = Timer counts system cycles; %01 = Timer counts positive edges on CNT pin; %10 = Timer counts underflows of timer A; %11 = Timer counts underflows of timer A occurring along with a positive edge on CNT pin.
+*   Bit #7: 0 = Writing into TOD registers sets TOD; 1 = Writing into TOD registers sets alarm time.
+    
+$DC10-$DCFF  
+CIA#1 register images (repeated every $10, 16 bytes).
+
+$DD00-$DDFF
+CIA#2; serial bus, RS232, NMI control
+
+$DD00  
+Port A, serial bus access. Bits:
+*   Bits #0-#1: VIC bank. Values:
+    *   %00, 0: Bank #3, $C000-$FFFF, 49152-65535.
+    *   %01, 1: Bank #2, $8000-$BFFF, 32768-49151.
+    *   %10, 2: Bank #1, $4000-$7FFF, 16384-32767.
+    *   %11, 3: Bank #0, $0000-$3FFF, 0-16383.
+*   Bit #2: RS232 TXD line, output bit.
+*   Bit #3: Serial bus ATN OUT; 0 = High; 1 = Low.
+*   Bit #4: Serial bus CLOCK OUT; 0 = High; 1 = Low.
+*   Bit #5: Serial bus DATA OUT; 0 = High; 1 = Low.
+*   Bit #6: Serial bus CLOCK IN; 0 = Low; 1 = High.
+*   Bit #7: Serial bus DATA IN; 0 = Low; 1 = High.
+
+$DD01  
+Port B, RS232 access. Read bits:
+*   Bit #0: RS232 RXD line, input bit.
+*   Bit #3: RS232 RI line.
+*   Bit #4: RS232 DCD line.
+*   Bit #5: User port H pin.
+*   Bit #6: RS232 CTS line; 1 = Sender is ready to send.
+*   Bit #7: RS232 DSR line; 1 = Receiver is ready to receive.
+Write bits:
+*   Bit #1: RS232 RTS line. 1 = Sender is ready to send.
+*   Bit #2: RS232 DTR line. 1 = Receiver is ready to receive.
+*   Bit #3: RS232 RI line.
+*   Bit #4: RS232 DCD line.
+*   Bit #5: User port H pin.
+    
+$DD02  
+Port A data direction register.
+*   Bit #x: 0 = Bit #x in port A can only be read; 1 = Bit #x in port A can be read and written.
+
+$DD03  
+Port B data direction register.
+*   Bit #x: 0 = Bit #x in port B can only be read; 1 = Bit #x in port B can be read and written.
+
+$DD04-$DD05  
+Timer A. Read: Current timer value.  
+Write: Set timer start value.
+
+$DD06-$DD07  
+Timer B. Read: Current timer value.  
+Write: Set timer start value.
+
+$DD08  
+Time of Day, tenth seconds (in BCD). Values: $00-$09. Read: Current TOD value.  
+Write: Set TOD or alarm time.
+
+$DD09  
+Time of Day, seconds (in BCD). Values: $00-$59. Read: Current TOD value.  
+Write: Set TOD or alarm time.
+
+$DD0A  
+Time of Day, minutes (in BCD). Values: $00-$59. Read: Current TOD value.  
+Write: Set TOD or alarm time.
+
+$DD0B  
+Time of Day, hours (in BCD). Read bits:
+*   Bits #0-#5: Hours.
+*   Bit #7: 0 = AM; 1 = PM.
+Write: Set TOD or alarm time.
+
+$DD0C  
+Serial shift register. (Bits are read and written upon every positive edge of the CNT pin.)
+
+$DD0D  
+Interrupt control and status register.
+Read bits:
+*   Bit #0: 1 = Timer A underflow occurred.
+*   Bit #1: 1 = Timer B underflow occurred.
+*   Bit #2: 1 = TOD is equal to alarm time.
+*   Bit #3: 1 = A complete byte has been received into or sent from serial shift register.
+*   Bit #4: Signal level on FLAG pin.
+*   Bit #7: A non-maskable interrupt has been generated.
+Write bits:
+*   Bit #0: 1 = Enable non-maskable interrupts generated by timer A underflow.
+*   Bit #1: 1 = Enable non-maskable interrupts generated by timer B underflow.
+*   Bit #2: 1 = Enable TOD alarm non-maskable interrupt.
+*   Bit #3: 1 = Enable non-maskable interrupts generated by a byte having been received/sent via serial shift register.
+*   Bit #4: 1 = Enable non-maskable interrupts generated by positive edge on FLAG pin.
+*   Bit #7: Fill bit; bits #0-#6, that are set to 1, get their values from this bit; bits #0-#6, that are set to 0, are left unchanged.
+
+$DD0E  
+Timer A control register. Bits:
+*   Bit #0: 0 = Stop timer; 1 = Start timer.
+*   Bit #1: 1 = Indicate timer underflow on port B bit #6.
+*   Bit #2: 0 = Upon timer underflow, invert port B bit #6; 1 = upon timer underflow, generate a positive edge on port B bit #6 for 1 system cycle.
+*   Bit #3: 0 = Timer restarts upon underflow; 1 = Timer stops upon underflow.
+*   Bit #4: 1 = Load start value into timer.
+*   Bit #5: 0 = Timer counts system cycles; 1 = Timer counts positive edges on CNT pin.
+*   Bit #6: Serial shift register direction; 0 = Input, read; 1 = Output, write.
+*   Bit #7: TOD speed; 0 = 60 Hz; 1 = 50 Hz.
+
+$DD0F  
+Timer B control register. Bits:
+*   Bit #0: 0 = Stop timer; 1 = Start timer.
+*   Bit #1: 1 = Indicate timer underflow on port B bit #7.
+*   Bit #2: 0 = Upon timer underflow, invert port B bit #7; 1 = upon timer underflow, generate a positive edge on port B bit #7 for 1 system cycle.
+*   Bit #3: 0 = Timer restarts upon underflow; 1 = Timer stops upon underflow.
+*   Bit #4: 1 = Load start value into timer.
+*   Bits #5-#6: %00 = Timer counts system cycles; %01 = Timer counts positive edges on CNT pin; %10 = Timer counts underflows of timer A; %11 = Timer counts underflows of timer A occurring along with a positive edge on CNT pin.
+*   Bit #7: 0 = Writing into TOD registers sets TOD; 1 = Writing into TOD registers sets alarm time.
+
+$DD10-$DDFF  
+CIA#2 register images (repeated every $10, 16 bytes).
+
+$DE00-$DEFF  
+I/O Area #1, memory mapped registers or machine code routines of optional external devices (256 bytes). Layout and contents depend on the actual device.
+
+$DF00-$DFFF  
+I/O Area #2, memory mapped registers or machine code routines of optional external devices (256 bytes). Layout and contents depend on the actual device.
+
+$E000-$FFFF
+KERNAL ROM
+
+$E000-$FFFF  
+KERNAL ROM or RAM area (8192 bytes); depends on the value of bits #0-#2 of the processor port at memory address $0001:
+*   %x0x: RAM area.
+*   %x1x: KERNAL ROM.
+
+$FFFA-$FFFF, 65530-65535  
+Hardware vectors
+
+$FFFA-$FFFB  
+Execution address of non-maskable interrupt service routine.  
+Default: $FE43.
+
+$FFFC-$FFFD  
+Execution address of cold reset.  
+Default: $FCE2.
+
+$FFFE-$FFFF  
+Execution address of interrupt service routine.  
+Default: $FF48.
+
+KERNAL
+---------------------------------------
+$E000/57344 EXP continued From BASIC ROM
+$E043/57411 Series Evaluation
+$E08D/57485 Constants for RND
+$E097/57495 Evaluate <rnd>
+$E0F9/57593 Handle I/O Error in BASIC
+$E10C/57612 Output Character
+$E112/57618 Input Character
+$E118/57624 Set Up For Output
+$E11E/57630 Set Up For Input
+$E124/57636 Get One Character
+$E12A/57642 Perform [sys]
+$E156/57686 Perform [save]
+$E165/57701 Perform [verify]
+$E168/57704 Perform [load]
+$E1BE/57790 Perform [open]
+$E1C7/57799 Perform [close]
+$E1D4/57812 Get Parameters For LOAD/SAVE
+$E200/57856 Get Next One Byte Parameter
+$E206/57862 Check Default Parameters
+$E20E/57870 Check For Comma
+$E219/57881 Get Parameters For OPEN/CLOSE
+$E264/57956 Evaluate <cos>
+$E26B/57963 Evaluate <sin>
+$E2B4/58036 Evaluate <tan>
+$E2E0/58080 Table of Trig Constants   1.570796327
+$E2E5/58085 Table of Trig Constants   6.28318531
+$E2EA/58090 Table of Trig Constants   0.25
+$E2EF/58095 Table of Trig Constants   #05
+$E2F0/58096 Table of Trig Constants   -14.3813907
+$E2F5/58101 Table of Trig Constants   42.0077971
+$E2FA/58106 Table of Trig Constants   -76.7041703
+$E2FF/58111 Table of Trig Constants   81.6052237
+$E304/58116 Table of Trig Constants   -41.3417021
+$E309/58121 Table of Trig Constants   6.28318531
+$E30E/58126 Evaluate <atn>
+$E33E/58174 Table of ATN Constants   #0b
+$E33F/58175 Table of ATN Constants   -0.00068479391
+$E344/58180 Table of ATN Constants   0.00485094216
+$E349/58185 Table of ATN Constants   -0.161117018
+$E34E/58190 Table of ATN Constants   0.034209638
+$E353/58195 Table of ATN Constants   -0.0542791328
+$E358/58200 Table of ATN Constants   0.0724571965
+$E35D/58205 Table of ATN Constants   -0.0898023954
+$E362/58210 Table of ATN Constants   0.110932413
+$E367/58215 Table of ATN Constants   -0.142839808
+$E36C/58220 Table of ATN Constants   0.19999912
+$E371/58225 Table of ATN Constants   -0.333333316
+$E376/58230 Table of ATN Constants   1.00
+$E37B/58235 BASIC Warm Start [RUNSTOP-RESTORE]
+$E394/58260 BASIC Cold Start
+$E3A2/58274 CHRGET For Zero-page
+$E3BA/58298 RND Seed For zero-page
+$E3BF/58303 Initialize BASIC RAM
+$E422/58402 Output Power-Up Message
+$E447/58439 Table of BASIC Vectors (for 0300)
+$E453/58451 Initialize Vectors
+$E45F/58463 Power-Up Message
+$E4AC/58540 Version Indicator(?)
+$E4AD/58541 Patch for BASIC Call to CHKOUT
+$E4B7/58551 Unused Bytes For Future Patches
+$E4D3/58579 Patch for RS232-Routines
+$E4DA/58586 Reset Character Color
+$E4E0/58592 Pause After Finding Tape File
+$E4EC/58604 RS232 Timing Table -- PAL
+$E500/58624 Get I/O Address
+$E505/58629 Get Screen Size
+$E50A/58634 Put / Get Row And Column
+$E518/58648 Initialize I/O
+$E544/58692 Clear Screen
+$E566/58726 Home Cursor
+$E56C/58732 Set Screen Pointers
+$E59A/58778 Set I/O Defaults (Unused Entry)
+$E5A0/58784 Set I/O Defaults
+$E5B4/58804 Get Character From Keyboard Buffer
+$E5CA/58826 Input From Keyboard
+$E632/58930 Input From Screen or Keyboard
+$E684/59012 Quotes Test
+$E691/59025 Set Up Screen Print
+$E6B6/59062 Advance Cursor
+$E6ED/59117 Retreat Cursor
+$E701/59137 Back on to Previous Line
+$E716/59158 Output to Screen
+$E72A/59178 -unshifted characters-
+$E7D4/59348 -shifted characters-
+$E87C/59516 Go to Next Line
+$E891/59537 Output <CR>
+$E8A1/59553 Check Line Decrement
+$E8B3/59571 Check Line Increment
+$E8CB/59595 Set Color Code
+$E8DA/59610 Color Code Table
+$E8EA/59626 Scroll Screen
+$E965/59749 Open A Space On The Screen
+$E9C8/59848 Move A Screen Line
+$E9E0/59872 Syncronise Color Transfer
+$E9F0/59888 Set Start of Line
+$E9FF/59903 Clear Screen Line
+$EA13/59923 Print To Screen
+$EA24/59940 Syncronise Color Pointer
+$EA31/59953 Main IRQ Entry Point
+$EA81/60033 Restore A/X/Y and End IRQ
+$EA87/60039 Scan Keyboard
+$EADD/60125 Process Key Image
+$EB48/60232 Check for Shift, CTRL, C=
+$EB79/60281 Pointers to Keyboard decoding tables
+$EB81/60289 Keyboard 1 -- Unshifted
+$EBC2/60354 Keyboard 2 -- Shifted
+$EC03/60419 Keyboard 3 -- Commodore
+$EC44/60484 Graphics/Text Control
+$EC78/60536 Keyboard 4 -- Control
+$ECB9/60601 Video Chip Setup Table
+$ECE7/60647 Shift-Run Equivalent
+$ECF0/60656 Low Byte Screen Line Addresses
+$ED09/60681 Send TALK Command on Serial Bus
+$ED0C/60684 Send LISTEN Command on Serial Bus
+$ED40/60736 Send Data On Serial Bus
+$EDAD/60845 Flag Errors: Status #80 - DEVICE NOT PRESENT
+$EDB0/60848 Flag Errors: Status #03 - WRITE TIMEOUT
+$EDB9/60857 Send LISTEN Secondary Address
+$EDBE/60862 Clear ATN
+$EDC7/60871 Send TALK Secondary Address
+$EDCC/60876 Wait For Clock
+$EDDD/60893 Send Serial Deferred
+$EDEF/60911 Send UNTALK
+$EDFE/60926 Send UNLISTEN
+$EE13/60947 Receive From Serial Bus
+$EE85/61061 Serial Clock On
+$EE8E/61070 Serial Clock Off
+$EE97/61079 Serial Output 1
+$EEA0/61088 Serial Output 0
+$EEA9/61097 Get Serial Data And Clock In
+$EEB3/61107 Delay 1 ms
+$EEBB/61115 RS232 Send
+$EF06/61190 Send New RS232 Byte
+$EF2E/61230 'No DSR' / 'No CTS' Error
+$EF39/61241 Disable Timer
+$EF4A/61258 Compute Bit Count
+$EF59/61273 RS232 Receive
+$EF7E/61310 Set Up To Receive
+$EF90/61328 Process RS232 Byte
+$EFE1/61409 Submit to RS232
+$F00D/61453 No DSR (Data Set Ready) Error
+$F017/61463 Send to RS232 Buffer
+$F04D/61517 Input From RS232
+$F086/61574 Get From RS232
+$F0A4/61604 Serial Bus Idle
+$F0BD/61629 Table of Kernal I/O Messages
+$F12B/61739 Print Message if Direct
+$F12F/61743 Print Message
+$F13E/61758 Get a byte
+$F157/61783 Input a byte
+$F199/61849 Get From Tape / Serial / RS232
+$F1CA/61898 Output One Character
+$F20E/61966 Set Input Device
+$F250/62032 Set Output Device
+$F291/62097 Close File
+$F30F/62223 Find File
+$F31F/62239 Set File values
+$F32F/62255 Abort All Files
+$F333/62259 Restore Default I/O
+$F34A/62282 Open File
+$F3D5/62421 Send Secondary Address
+$F409/62473 Open RS232
+$F49E/62622 Load RAM
+$F4B8/62648 Load File From Serial Bus
+$F533/62771 Load File From Tape
+$F5AF/62895 Print "SEARCHING"
+$F5C1/62913 Print Filename
+$F5D2/62930 Print "LOADING / VERIFYING"
+$F5DD/62941 Save RAM
+$F5FA/62970 Save to Serial Bus
+$F659/63065 Save to Tape
+$F68F/63119 Print "SAVING"
+$F69B/63131 Bump Clock
+$F6DD/63197 Get Time
+$F6E4/63204 Set Time
+$F6ED/63213 Check STOP Key
+$F6FB/63227 Output I/O Error Messages: 'TOO MANY FILES'
+$F6FE/63230 Output I/O Error Messages: 'FILE OPEN'
+$F701/63233 Output I/O Error Messages: 'FILE NOT OPEN'
+$F704/63236 Output I/O Error Messages: 'FILE NOT FOUND'
+$F707/63239 Output I/O Error Messages: 'DEVICE NOT PRESENT'
+$F70A/63242 Output I/O Error Messages: 'NOT INPUT FILE'
+$F70D/63245 Output I/O Error Messages: 'NOT OUTPUT FILE'
+$F710/63248 Output I/O Error Messages: 'MISSING FILENAME'
+$F713/63251 Output I/O Error Messages: 'ILLEGAL DEVICE NUMBER'
+$F72C/63276 Find Any Tape Header
+$F76A/63338 Write Tape Header
+$F7D0/63440 Get Buffer Address
+$F7D7/63447 Set Buffer Stat / End Pointers
+$F7EA/63466 Find Specific Tape Header
+$F80D/63501 Bump Tape Pointer
+$F817/63511 Print "PRESS PLAY ON TAPE"
+$F82E/63534 Check Tape Status
+$F838/63544 Print "PRESS RECORD..."
+$F841/63553 Initiate Tape Read
+$F864/63588 Initiate Tape Write
+$F875/63605 Common Tape Code
+$F8D0/63696 Check Tape Stop
+$F8E2/63714 Set Read Timing
+$F92C/63788 Read Tape Bits
+$FA60/64096 Store Tape Characters
+$FB8E/64398 Reset Tape Pointer
+$FB97/64407 New Character Setup
+$FBA6/64422 Send Tone to Tape
+$FBC8/64456 Write Data to Tape
+$FBCD/64461 IRQ Entry Point
+$FC57/64599 Write Tape Leader
+$FC93/64659 Restore Normal IRQ
+$FCB8/64696 Set IRQ Vector
+$FCCA/64714 Stop Tape Motor
+$FCD1/64721 Check Read / Write Pointer
+$FCDB/64731 Bump Read / Write Pointer
+$FCE2/64738 Power-Up RESET Entry
+$FD02/64770 Check For 8-ROM
+$FD10/64784 8-ROM Mask 'CBM80'
+$FD15/64789 Restore Kernal Vectors
+$FD1A/64794 Change Vectors For User
+$FD30/64816 Kernal Reset Vectors
+$FD50/64848 Initialise System Constants
+$FD9B/64923 IRQ Vectors For Tape I/O
+$FDA3/64931 Initialise I/O
+$FDDD/64989 Enable Timer
+$FDF9/65017 Set Filename
+$FE00/65024 Set Logical File Parameters
+$FE07/65031 Get I/O Status Word
+$FE18/65048 Control OS Messages
+$FE21/65057 Set IEEE Timeout
+$FE25/65061 Read / Set Top of Memory
+$FE34/65076 Read / Set Bottom of Memory
+$FE43/65091 NMI Transfer Entry
+$FE66/65126 Warm Start Basic
+$FEBC/65212 Exit Interrupt
+$FEC2/65218 RS232 Timing Table - NTSC
+$FED6/65238 NMI RS232 In
+$FF07/65287 NMI RS232 Out
+$FF43/65347 Fake IRQ Entry
+$FF48/65352 IRQ Entry
+$FF5B/65371 Initialize screen editor
+$FF80/65408 Kernal Version Number
+$FF81/65409 Init Editor & Video Chips
+$FF84/65412 Init I/O Devices, Ports & Timers
+$FF87/65415 Init Ram & Buffers
+$FF8A/65418 Restore Vectors
+$FF8D/65421 Change Vectors For User
+$FF90/65424 Control OS Messages
+$FF93/65427 Send SA After Listen
+$FF96/65430 Send SA After Talk
+$FF99/65433 Set/Read System RAM Top
+$FF9C/65436 Set/Read System RAM Bottom
+$FF9F/65439 Scan Keyboard
+$FFA2/65442 Set Timeout In IEEE
+$FFA5/65445 Handshake Serial Byte In
+$FFA8/65448 Handshake Serial Byte Out
+$FFAB/65451 Command Serial Bus UNTALK
+$FFAE/65454 Command Serial Bus UNLISTEN
+$FFB1/65457 Command Serial Bus LISTEN
+$FFB4/65460 Command Serial Bus TALK
+$FFB7/65463 Read I/O Status Word
+$FFBA/65466 Set Logical File Parameters
+$FFBD/65469 Set Filename
+$FFC0/65472 Open Vector
+$FFC3/65475 Close Vector
+$FFC6/65478 Set Input
+$FFC9/65481 Set Output
+$FFCC/65484 Restore I/O Vector
+$FFCF/65487 Input Vector, chrin
+$FFD2/65490 Output Vector, chrout
+$FFD5/65493 Load RAM From Device
+$FFD8/65496 Save RAM To Device
+$FFDB/65499 Set Real-Time Clock
+$FFDE/65502 Read Real-Time Clock
+$FFE1/65505 Test-Stop Vector
+$FFE4/65508 Get From Keyboad
+$FFE7/65511 Close All Channels And Files
+$FFEA/65514 Increment Real-Time Clock
+$FFED/65517 Return Screen Organization
+$FFF0/65520 Read / Set Cursor X/Y Position
+$FFF3/65523 Return I/O Base Address
+$FFF6/65526 -
+$FFF8/65528 SYSTEM
+$FFFA/65530 Vector: NMI
+$FFFC/65532 Vector: RESET
+$FFFE/65534 Vector: IRQ
