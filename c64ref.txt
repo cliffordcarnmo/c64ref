@@ -1,4 +1,5 @@
 STATUS REGISTER
+--------------------------------------------------------------------------------
 ---------------------------------
 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
 | N | V |   | B | D | I | Z | C |
@@ -15,40 +16,40 @@ STATUS REGISTER
 REGISTERS
 --------------------------------------------------------------------------------
 PC Program Counter
-	This register points the address from which the next
-	instruction byte (opcode or parameter) will be fetched.
-	Unlike other registers, this one is 16 bits in length. The
-	low and high 8-bit halves of the register are called PCL
-	and PCH, respectively.
+This register points the address from which the next
+instruction byte (opcode or parameter) will be fetched.
+Unlike other registers, this one is 16 bits in length. The
+low and high 8-bit halves of the register are called PCL
+and PCH, respectively.
 
-	The Program Counter may be read by pushing its value on
-	the stack. This can be done either by jumping to a
-	subroutine or by causing an interrupt.
+The Program Counter may be read by pushing its value on
+the stack. This can be done either by jumping to a
+subroutine or by causing an interrupt.
 
 S Stack pointer
-	The NMOS 65xx processors have 256 bytes of stack memory,
-	ranging from $0100 to $01FF. The S register is a 8-bit
-	offset to the stack page. In other words, whenever
-	anything is being pushed on the stack, it will be stored
-	to the address $0100+S.
+The NMOS 65xx processors have 256 bytes of stack memory,
+ranging from $0100 to $01FF. The S register is a 8-bit
+offset to the stack page. In other words, whenever
+anything is being pushed on the stack, it will be stored
+to the address $0100+S.
 
-	The Stack pointer can be read and written by transfering
-	its value to or from the index register X (see below) with
-	the TSX and TXS instructions.
+The Stack pointer can be read and written by transfering
+its value to or from the index register X (see below) with
+the TSX and TXS instructions.
 
 P Processor status
-	This 8-bit register stores the state of the processor. The
-	bits in this register are called flags. Most of the flags
-	have something to do with arithmetic operations.
+This 8-bit register stores the state of the processor. The
+bits in this register are called flags. Most of the flags
+have something to do with arithmetic operations.
 
-	The P register can be read by pushing it on the stack
-	(with PHP or by causing an interrupt). If you only need to
-	read one flag, you can use the branch instructions.
-	Setting the flags is possible by pulling the P register
-	from stack or by using the flag set or clear instructions.
+The P register can be read by pushing it on the stack
+(with PHP or by causing an interrupt). If you only need to
+read one flag, you can use the branch instructions.
+Setting the flags is possible by pulling the P register
+from stack or by using the flag set or clear instructions.
 
-	Following is a list of the flags, starting from the 8th
-	bit of the P register (bit 7, value $80):
+Following is a list of the flags, starting from the 8th
+bit of the P register (bit 7, value $80):
 
 	N Negative flag
 		This flag will be set after any arithmetic operations
@@ -156,24 +157,24 @@ P Processor status
 		of the byte; ASL always clears it. Similarly, the ROR
 		and LSR instructions shift to the right.
 
-	A Accumulator
-		The accumulator is the main register for arithmetic and
-		logic operations. Unlike the index registers X and Y, it
-		has a direct connection to the Arithmetic and Logic Unit
-		(ALU). This is why many operations are only available for
-		the accumulator, not the index registers.
+A Accumulator
+	The accumulator is the main register for arithmetic and
+	logic operations. Unlike the index registers X and Y, it
+	has a direct connection to the Arithmetic and Logic Unit
+	(ALU). This is why many operations are only available for
+	the accumulator, not the index registers.
 
-	X Index register X
-		This is the main register for addressing data with
-		indices. It has a special addressing mode, indexed
-		indirect, which lets you to have a vector table on the
-		zero page.
+X Index register X
+	This is the main register for addressing data with
+	indices. It has a special addressing mode, indexed
+	indirect, which lets you to have a vector table on the
+	zero page.
 
-	Y Index register Y
-		The Y register has the least operations available. On the
-		other hand, only it has the indirect indexed addressing
-		mode that enables access to any memory place without
-		having to use self-modifying code.
+Y Index register Y
+	The Y register has the least operations available. On the
+	other hand, only it has the indirect indexed addressing
+	mode that enables access to any memory place without
+	having to use self-modifying code.
 
 OPCODES
 --------------------------------------------------------------------------------
@@ -760,7 +761,7 @@ SPRITE POINTERS
 Sprite pointers are located at $07f8-$07ff (one for each sprite).
 If sprites data is located at for example $3e00, pointer value is $3e00 / 64 = $f8.
 LDA #$f8
-STA $07f8 (pointer for sprite 0)
+STA $07f8 (pointer for sprite 0 points at $3e00)
 
 KOALA IMAGE DATA FORMAT
 --------------------------------------------------------------------------------
@@ -791,20 +792,20 @@ f Light grey
 RAM SUMMARY
 --------------------------------------------------------------------------------
 $0000-$00FF Page 0			Zeropage addressing
-$0100-$01FF	Page 1			Enhanced Zeropage contains the stack
-$0200-$02FF	Page 2			Operating System and BASIC pointers
-$0300-$03FF	Page 3			Operating System and BASIC pointers
-$0400-$07FF	Page 4-7		Screen Memory
-$0800-$9FFF	Page 8-159		Free BASIC program storage area (38911 bytes)
-$A000-$BFFF	Page 160-191	Free machine language program storage area (when switched-out with ROM)
-$C000-$CFFF	Page 192-207	Free machine language program storage area
-$D000-$D3FF	Page 208-211	
-$D400-$D7FF	Page 212-215	
-$D800-$DBFF	Page 216-219	
-$DC00-$DCFF	Page 220	
-$DD00-$DDFF	Page 221	
-$DE00-$DFFF	Page 222-223	Reserved for interface extensions
-$E000-$FFFF	Page 224-255	Free machine language program storage area (when switched-out with ROM)
+$0100-$01FF Page 1			Enhanced Zeropage contains the stack
+$0200-$02FF Page 2			Operating System and BASIC pointers
+$0300-$03FF Page 3			Operating System and BASIC pointers
+$0400-$07FF Page 4-7		Screen Memory
+$0800-$9FFF Page 8-159		Free BASIC program storage area (38911 bytes)
+$A000-$BFFF Page 160-191	Free machine language program storage area (when switched-out with ROM)
+$C000-$CFFF Page 192-207	Free machine language program storage area
+$D000-$D3FF Page 208-211
+$D400-$D7FF Page 212-215
+$D800-$DBFF Page 216-219
+$DC00-$DCFF Page 220
+$DD00-$DDFF Page 221
+$DE00-$DFFF Page 222-223	Reserved for interface extensions
+$E000-$FFFF Page 224-255	Free machine language program storage area (when switched-out with ROM)
 
 ROM SUMMARY
 --------------------------------------------------------------------------------
