@@ -2332,286 +2332,286 @@ Default: $FF48.
 
 KERNAL
 --------------------------------------------------------------------------------
-$E000/57344 EXP continued From BASIC ROM
-$E043/57411 Series Evaluation
-$E08D/57485 Constants for RND
-$E097/57495 Evaluate <rnd>
-$E0F9/57593 Handle I/O Error in BASIC
-$E10C/57612 Output Character
-$E112/57618 Input Character
-$E118/57624 Set Up For Output
-$E11E/57630 Set Up For Input
-$E124/57636 Get One Character
-$E12A/57642 Perform [sys]
-$E156/57686 Perform [save]
-$E165/57701 Perform [verify]
-$E168/57704 Perform [load]
-$E1BE/57790 Perform [open]
-$E1C7/57799 Perform [close]
-$E1D4/57812 Get Parameters For LOAD/SAVE
-$E200/57856 Get Next One Byte Parameter
-$E206/57862 Check Default Parameters
-$E20E/57870 Check For Comma
-$E219/57881 Get Parameters For OPEN/CLOSE
-$E264/57956 Evaluate <cos>
-$E26B/57963 Evaluate <sin>
-$E2B4/58036 Evaluate <tan>
-$E2E0/58080 Table of Trig Constants   1.570796327
-$E2E5/58085 Table of Trig Constants   6.28318531
-$E2EA/58090 Table of Trig Constants   0.25
-$E2EF/58095 Table of Trig Constants   #05
-$E2F0/58096 Table of Trig Constants   -14.3813907
-$E2F5/58101 Table of Trig Constants   42.0077971
-$E2FA/58106 Table of Trig Constants   -76.7041703
-$E2FF/58111 Table of Trig Constants   81.6052237
-$E304/58116 Table of Trig Constants   -41.3417021
-$E309/58121 Table of Trig Constants   6.28318531
-$E30E/58126 Evaluate <atn>
-$E33E/58174 Table of ATN Constants   #0b
-$E33F/58175 Table of ATN Constants   -0.00068479391
-$E344/58180 Table of ATN Constants   0.00485094216
-$E349/58185 Table of ATN Constants   -0.161117018
-$E34E/58190 Table of ATN Constants   0.034209638
-$E353/58195 Table of ATN Constants   -0.0542791328
-$E358/58200 Table of ATN Constants   0.0724571965
-$E35D/58205 Table of ATN Constants   -0.0898023954
-$E362/58210 Table of ATN Constants   0.110932413
-$E367/58215 Table of ATN Constants   -0.142839808
-$E36C/58220 Table of ATN Constants   0.19999912
-$E371/58225 Table of ATN Constants   -0.333333316
-$E376/58230 Table of ATN Constants   1.00
-$E37B/58235 BASIC Warm Start [RUNSTOP-RESTORE]
-$E394/58260 BASIC Cold Start
-$E3A2/58274 CHRGET For Zero-page
-$E3BA/58298 RND Seed For zero-page
-$E3BF/58303 Initialize BASIC RAM
-$E422/58402 Output Power-Up Message
-$E447/58439 Table of BASIC Vectors (for 0300)
-$E453/58451 Initialize Vectors
-$E45F/58463 Power-Up Message
-$E4AC/58540 Version Indicator(?)
-$E4AD/58541 Patch for BASIC Call to CHKOUT
-$E4B7/58551 Unused Bytes For Future Patches
-$E4D3/58579 Patch for RS232-Routines
-$E4DA/58586 Reset Character Color
-$E4E0/58592 Pause After Finding Tape File
-$E4EC/58604 RS232 Timing Table -- PAL
-$E500/58624 Get I/O Address
-$E505/58629 Get Screen Size
-$E50A/58634 Put / Get Row And Column
-$E518/58648 Initialize I/O
-$E544/58692 Clear Screen
-$E566/58726 Home Cursor
-$E56C/58732 Set Screen Pointers
-$E59A/58778 Set I/O Defaults (Unused Entry)
-$E5A0/58784 Set I/O Defaults
-$E5B4/58804 Get Character From Keyboard Buffer
-$E5CA/58826 Input From Keyboard
-$E632/58930 Input From Screen or Keyboard
-$E684/59012 Quotes Test
-$E691/59025 Set Up Screen Print
-$E6B6/59062 Advance Cursor
-$E6ED/59117 Retreat Cursor
-$E701/59137 Back on to Previous Line
-$E716/59158 Output to Screen
-$E72A/59178 -unshifted characters-
-$E7D4/59348 -shifted characters-
-$E87C/59516 Go to Next Line
-$E891/59537 Output <CR>
-$E8A1/59553 Check Line Decrement
-$E8B3/59571 Check Line Increment
-$E8CB/59595 Set Color Code
-$E8DA/59610 Color Code Table
-$E8EA/59626 Scroll Screen
-$E965/59749 Open A Space On The Screen
-$E9C8/59848 Move A Screen Line
-$E9E0/59872 Syncronise Color Transfer
-$E9F0/59888 Set Start of Line
-$E9FF/59903 Clear Screen Line
-$EA13/59923 Print To Screen
-$EA24/59940 Syncronise Color Pointer
-$EA31/59953 Main IRQ Entry Point
-$EA81/60033 Restore A/X/Y and End IRQ
-$EA87/60039 Scan Keyboard
-$EADD/60125 Process Key Image
-$EB48/60232 Check for Shift, CTRL, C=
-$EB79/60281 Pointers to Keyboard decoding tables
-$EB81/60289 Keyboard 1 -- Unshifted
-$EBC2/60354 Keyboard 2 -- Shifted
-$EC03/60419 Keyboard 3 -- Commodore
-$EC44/60484 Graphics/Text Control
-$EC78/60536 Keyboard 4 -- Control
-$ECB9/60601 Video Chip Setup Table
-$ECE7/60647 Shift-Run Equivalent
-$ECF0/60656 Low Byte Screen Line Addresses
-$ED09/60681 Send TALK Command on Serial Bus
-$ED0C/60684 Send LISTEN Command on Serial Bus
-$ED40/60736 Send Data On Serial Bus
-$EDAD/60845 Flag Errors: Status #80 - DEVICE NOT PRESENT
-$EDB0/60848 Flag Errors: Status #03 - WRITE TIMEOUT
-$EDB9/60857 Send LISTEN Secondary Address
-$EDBE/60862 Clear ATN
-$EDC7/60871 Send TALK Secondary Address
-$EDCC/60876 Wait For Clock
-$EDDD/60893 Send Serial Deferred
-$EDEF/60911 Send UNTALK
-$EDFE/60926 Send UNLISTEN
-$EE13/60947 Receive From Serial Bus
-$EE85/61061 Serial Clock On
-$EE8E/61070 Serial Clock Off
-$EE97/61079 Serial Output 1
-$EEA0/61088 Serial Output 0
-$EEA9/61097 Get Serial Data And Clock In
-$EEB3/61107 Delay 1 ms
-$EEBB/61115 RS232 Send
-$EF06/61190 Send New RS232 Byte
-$EF2E/61230 'No DSR' / 'No CTS' Error
-$EF39/61241 Disable Timer
-$EF4A/61258 Compute Bit Count
-$EF59/61273 RS232 Receive
-$EF7E/61310 Set Up To Receive
-$EF90/61328 Process RS232 Byte
-$EFE1/61409 Submit to RS232
-$F00D/61453 No DSR (Data Set Ready) Error
-$F017/61463 Send to RS232 Buffer
-$F04D/61517 Input From RS232
-$F086/61574 Get From RS232
-$F0A4/61604 Serial Bus Idle
-$F0BD/61629 Table of Kernal I/O Messages
-$F12B/61739 Print Message if Direct
-$F12F/61743 Print Message
-$F13E/61758 Get a byte
-$F157/61783 Input a byte
-$F199/61849 Get From Tape / Serial / RS232
-$F1CA/61898 Output One Character
-$F20E/61966 Set Input Device
-$F250/62032 Set Output Device
-$F291/62097 Close File
-$F30F/62223 Find File
-$F31F/62239 Set File values
-$F32F/62255 Abort All Files
-$F333/62259 Restore Default I/O
-$F34A/62282 Open File
-$F3D5/62421 Send Secondary Address
-$F409/62473 Open RS232
-$F49E/62622 Load RAM
-$F4B8/62648 Load File From Serial Bus
-$F533/62771 Load File From Tape
-$F5AF/62895 Print "SEARCHING"
-$F5C1/62913 Print Filename
-$F5D2/62930 Print "LOADING / VERIFYING"
-$F5DD/62941 Save RAM
-$F5FA/62970 Save to Serial Bus
-$F659/63065 Save to Tape
-$F68F/63119 Print "SAVING"
-$F69B/63131 Bump Clock
-$F6DD/63197 Get Time
-$F6E4/63204 Set Time
-$F6ED/63213 Check STOP Key
-$F6FB/63227 Output I/O Error Messages: 'TOO MANY FILES'
-$F6FE/63230 Output I/O Error Messages: 'FILE OPEN'
-$F701/63233 Output I/O Error Messages: 'FILE NOT OPEN'
-$F704/63236 Output I/O Error Messages: 'FILE NOT FOUND'
-$F707/63239 Output I/O Error Messages: 'DEVICE NOT PRESENT'
-$F70A/63242 Output I/O Error Messages: 'NOT INPUT FILE'
-$F70D/63245 Output I/O Error Messages: 'NOT OUTPUT FILE'
-$F710/63248 Output I/O Error Messages: 'MISSING FILENAME'
-$F713/63251 Output I/O Error Messages: 'ILLEGAL DEVICE NUMBER'
-$F72C/63276 Find Any Tape Header
-$F76A/63338 Write Tape Header
-$F7D0/63440 Get Buffer Address
-$F7D7/63447 Set Buffer Stat / End Pointers
-$F7EA/63466 Find Specific Tape Header
-$F80D/63501 Bump Tape Pointer
-$F817/63511 Print "PRESS PLAY ON TAPE"
-$F82E/63534 Check Tape Status
-$F838/63544 Print "PRESS RECORD..."
-$F841/63553 Initiate Tape Read
-$F864/63588 Initiate Tape Write
-$F875/63605 Common Tape Code
-$F8D0/63696 Check Tape Stop
-$F8E2/63714 Set Read Timing
-$F92C/63788 Read Tape Bits
-$FA60/64096 Store Tape Characters
-$FB8E/64398 Reset Tape Pointer
-$FB97/64407 New Character Setup
-$FBA6/64422 Send Tone to Tape
-$FBC8/64456 Write Data to Tape
-$FBCD/64461 IRQ Entry Point
-$FC57/64599 Write Tape Leader
-$FC93/64659 Restore Normal IRQ
-$FCB8/64696 Set IRQ Vector
-$FCCA/64714 Stop Tape Motor
-$FCD1/64721 Check Read / Write Pointer
-$FCDB/64731 Bump Read / Write Pointer
-$FCE2/64738 Power-Up RESET Entry
-$FD02/64770 Check For 8-ROM
-$FD10/64784 8-ROM Mask 'CBM80'
-$FD15/64789 Restore Kernal Vectors
-$FD1A/64794 Change Vectors For User
-$FD30/64816 Kernal Reset Vectors
-$FD50/64848 Initialise System Constants
-$FD9B/64923 IRQ Vectors For Tape I/O
-$FDA3/64931 Initialise I/O
-$FDDD/64989 Enable Timer
-$FDF9/65017 Set Filename
-$FE00/65024 Set Logical File Parameters
-$FE07/65031 Get I/O Status Word
-$FE18/65048 Control OS Messages
-$FE21/65057 Set IEEE Timeout
-$FE25/65061 Read / Set Top of Memory
-$FE34/65076 Read / Set Bottom of Memory
-$FE43/65091 NMI Transfer Entry
-$FE66/65126 Warm Start Basic
-$FEBC/65212 Exit Interrupt
-$FEC2/65218 RS232 Timing Table - NTSC
-$FED6/65238 NMI RS232 In
-$FF07/65287 NMI RS232 Out
-$FF43/65347 Fake IRQ Entry
-$FF48/65352 IRQ Entry
-$FF5B/65371 Initialize screen editor
-$FF80/65408 Kernal Version Number
-$FF81/65409 Init Editor & Video Chips
-$FF84/65412 Init I/O Devices, Ports & Timers
-$FF87/65415 Init Ram & Buffers
-$FF8A/65418 Restore Vectors
-$FF8D/65421 Change Vectors For User
-$FF90/65424 Control OS Messages
-$FF93/65427 Send SA After Listen
-$FF96/65430 Send SA After Talk
-$FF99/65433 Set/Read System RAM Top
-$FF9C/65436 Set/Read System RAM Bottom
-$FF9F/65439 Scan Keyboard
-$FFA2/65442 Set Timeout In IEEE
-$FFA5/65445 Handshake Serial Byte In
-$FFA8/65448 Handshake Serial Byte Out
-$FFAB/65451 Command Serial Bus UNTALK
-$FFAE/65454 Command Serial Bus UNLISTEN
-$FFB1/65457 Command Serial Bus LISTEN
-$FFB4/65460 Command Serial Bus TALK
-$FFB7/65463 Read I/O Status Word
-$FFBA/65466 Set Logical File Parameters
-$FFBD/65469 Set Filename
-$FFC0/65472 Open Vector
-$FFC3/65475 Close Vector
-$FFC6/65478 Set Input
-$FFC9/65481 Set Output
-$FFCC/65484 Restore I/O Vector
-$FFCF/65487 Input Vector, chrin
-$FFD2/65490 Output Vector, chrout
-$FFD5/65493 Load RAM From Device
-$FFD8/65496 Save RAM To Device
-$FFDB/65499 Set Real-Time Clock
-$FFDE/65502 Read Real-Time Clock
-$FFE1/65505 Test-Stop Vector
-$FFE4/65508 Get From Keyboad
-$FFE7/65511 Close All Channels And Files
-$FFEA/65514 Increment Real-Time Clock
-$FFED/65517 Return Screen Organization
-$FFF0/65520 Read / Set Cursor X/Y Position
-$FFF3/65523 Return I/O Base Address
-$FFF6/65526 -
-$FFF8/65528 SYSTEM
-$FFFA/65530 Vector: NMI
-$FFFC/65532 Vector: RESET
-$FFFE/65534 Vector: IRQ
+$E000 EXP continued From BASIC ROM
+$E043 Series Evaluation
+$E08D Constants for RND
+$E097 Evaluate <rnd>
+$E0F9 Handle I/O Error in BASIC
+$E10C Output Character
+$E112 Input Character
+$E118 Set Up For Output
+$E11E Set Up For Input
+$E124 Get One Character
+$E12A Perform [sys]
+$E156 Perform [save]
+$E165 Perform [verify]
+$E168 Perform [load]
+$E1BE Perform [open]
+$E1C7 Perform [close]
+$E1D4 Get Parameters For LOAD/SAVE
+$E200 Get Next One Byte Parameter
+$E206 Check Default Parameters
+$E20E Check For Comma
+$E219 Get Parameters For OPEN/CLOSE
+$E264 Evaluate <cos>
+$E26B Evaluate <sin>
+$E2B4 Evaluate <tan>
+$E2E0 Table of Trig Constants   1.570796327
+$E2E5 Table of Trig Constants   6.28318531
+$E2EA Table of Trig Constants   0.25
+$E2EF Table of Trig Constants   #05
+$E2F0 Table of Trig Constants   -14.3813907
+$E2F5 Table of Trig Constants   42.0077971
+$E2FA Table of Trig Constants   -76.7041703
+$E2FF Table of Trig Constants   81.6052237
+$E304 Table of Trig Constants   -41.3417021
+$E309 Table of Trig Constants   6.28318531
+$E30E Evaluate <atn>
+$E33E Table of ATN Constants   #0b
+$E33F Table of ATN Constants   -0.00068479391
+$E344 Table of ATN Constants   0.00485094216
+$E349 Table of ATN Constants   -0.161117018
+$E34E Table of ATN Constants   0.034209638
+$E353 Table of ATN Constants   -0.0542791328
+$E358 Table of ATN Constants   0.0724571965
+$E35D Table of ATN Constants   -0.0898023954
+$E362 Table of ATN Constants   0.110932413
+$E367 Table of ATN Constants   -0.142839808
+$E36C Table of ATN Constants   0.19999912
+$E371 Table of ATN Constants   -0.333333316
+$E376 Table of ATN Constants   1.00
+$E37B BASIC Warm Start [RUNSTOP-RESTORE]
+$E394 BASIC Cold Start
+$E3A2 CHRGET For Zero-page
+$E3BA RND Seed For zero-page
+$E3BF Initialize BASIC RAM
+$E422 Output Power-Up Message
+$E447 Table of BASIC Vectors (for 0300)
+$E453 Initialize Vectors
+$E45F Power-Up Message
+$E4AC Version Indicator(?)
+$E4AD Patch for BASIC Call to CHKOUT
+$E4B7 Unused Bytes For Future Patches
+$E4D3 Patch for RS232-Routines
+$E4DA Reset Character Color
+$E4E0 Pause After Finding Tape File
+$E4EC RS232 Timing Table -- PAL
+$E500 Get I/O Address
+$E505 Get Screen Size
+$E50A Put / Get Row And Column
+$E518 Initialize I/O
+$E544 Clear Screen
+$E566 Home Cursor
+$E56C Set Screen Pointers
+$E59A Set I/O Defaults (Unused Entry)
+$E5A0 Set I/O Defaults
+$E5B4 Get Character From Keyboard Buffer
+$E5CA Input From Keyboard
+$E632 Input From Screen or Keyboard
+$E684 Quotes Test
+$E691 Set Up Screen Print
+$E6B6 Advance Cursor
+$E6ED Retreat Cursor
+$E701 Back on to Previous Line
+$E716 Output to Screen
+$E72A -unshifted characters-
+$E7D4 -shifted characters-
+$E87C Go to Next Line
+$E891 Output <CR>
+$E8A1 Check Line Decrement
+$E8B3 Check Line Increment
+$E8CB Set Color Code
+$E8DA Color Code Table
+$E8EA Scroll Screen
+$E965 Open A Space On The Screen
+$E9C8 Move A Screen Line
+$E9E0 Syncronise Color Transfer
+$E9F0 Set Start of Line
+$E9FF Clear Screen Line
+$EA13 Print To Screen
+$EA24 Syncronise Color Pointer
+$EA31 Main IRQ Entry Point
+$EA81 Restore A/X/Y and End IRQ
+$EA87 Scan Keyboard
+$EADD Process Key Image
+$EB48 Check for Shift, CTRL, C=
+$EB79 Pointers to Keyboard decoding tables
+$EB81 Keyboard 1 -- Unshifted
+$EBC2 Keyboard 2 -- Shifted
+$EC03 Keyboard 3 -- Commodore
+$EC44 Graphics/Text Control
+$EC78 Keyboard 4 -- Control
+$ECB9 Video Chip Setup Table
+$ECE7 Shift-Run Equivalent
+$ECF0 Low Byte Screen Line Addresses
+$ED09 Send TALK Command on Serial Bus
+$ED0C Send LISTEN Command on Serial Bus
+$ED40 Send Data On Serial Bus
+$EDAD Flag Errors: Status #80 - DEVICE NOT PRESENT
+$EDB0 Flag Errors: Status #03 - WRITE TIMEOUT
+$EDB9 Send LISTEN Secondary Address
+$EDBE Clear ATN
+$EDC7 Send TALK Secondary Address
+$EDCC Wait For Clock
+$EDDD Send Serial Deferred
+$EDEF Send UNTALK
+$EDFE Send UNLISTEN
+$EE13 Receive From Serial Bus
+$EE85 Serial Clock On
+$EE8E Serial Clock Off
+$EE97 Serial Output 1
+$EEA0 Serial Output 0
+$EEA9 Get Serial Data And Clock In
+$EEB3 Delay 1 ms
+$EEBB RS232 Send
+$EF06 Send New RS232 Byte
+$EF2E 'No DSR' / 'No CTS' Error
+$EF39 Disable Timer
+$EF4A Compute Bit Count
+$EF59 RS232 Receive
+$EF7E Set Up To Receive
+$EF90 Process RS232 Byte
+$EFE1 Submit to RS232
+$F00D No DSR (Data Set Ready) Error
+$F017 Send to RS232 Buffer
+$F04D Input From RS232
+$F086 Get From RS232
+$F0A4 Serial Bus Idle
+$F0BD Table of Kernal I/O Messages
+$F12B Print Message if Direct
+$F12F Print Message
+$F13E Get a byte
+$F157 Input a byte
+$F199 Get From Tape / Serial / RS232
+$F1CA Output One Character
+$F20E Set Input Device
+$F250 Set Output Device
+$F291 Close File
+$F30F Find File
+$F31F Set File values
+$F32F Abort All Files
+$F333 Restore Default I/O
+$F34A Open File
+$F3D5 Send Secondary Address
+$F409 Open RS232
+$F49E Load RAM
+$F4B8 Load File From Serial Bus
+$F533 Load File From Tape
+$F5AF Print "SEARCHING"
+$F5C1 Print Filename
+$F5D2 Print "LOADING / VERIFYING"
+$F5DD Save RAM
+$F5FA Save to Serial Bus
+$F659 Save to Tape
+$F68F Print "SAVING"
+$F69B Bump Clock
+$F6DD Get Time
+$F6E4 Set Time
+$F6ED Check STOP Key
+$F6FB Output I/O Error Messages: 'TOO MANY FILES'
+$F6FE Output I/O Error Messages: 'FILE OPEN'
+$F701 Output I/O Error Messages: 'FILE NOT OPEN'
+$F704 Output I/O Error Messages: 'FILE NOT FOUND'
+$F707 Output I/O Error Messages: 'DEVICE NOT PRESENT'
+$F70A Output I/O Error Messages: 'NOT INPUT FILE'
+$F70D Output I/O Error Messages: 'NOT OUTPUT FILE'
+$F710 Output I/O Error Messages: 'MISSING FILENAME'
+$F713 Output I/O Error Messages: 'ILLEGAL DEVICE NUMBER'
+$F72C Find Any Tape Header
+$F76A Write Tape Header
+$F7D0 Get Buffer Address
+$F7D7 Set Buffer Stat / End Pointers
+$F7EA Find Specific Tape Header
+$F80D Bump Tape Pointer
+$F817 Print "PRESS PLAY ON TAPE"
+$F82E Check Tape Status
+$F838 Print "PRESS RECORD..."
+$F841 Initiate Tape Read
+$F864 Initiate Tape Write
+$F875 Common Tape Code
+$F8D0 Check Tape Stop
+$F8E2 Set Read Timing
+$F92C Read Tape Bits
+$FA60 Store Tape Characters
+$FB8E Reset Tape Pointer
+$FB97 New Character Setup
+$FBA6 Send Tone to Tape
+$FBC8 Write Data to Tape
+$FBCD IRQ Entry Point
+$FC57 Write Tape Leader
+$FC93 Restore Normal IRQ
+$FCB8 Set IRQ Vector
+$FCCA Stop Tape Motor
+$FCD1 Check Read / Write Pointer
+$FCDB Bump Read / Write Pointer
+$FCE2 Power-Up RESET Entry
+$FD02 Check For 8-ROM
+$FD10 8-ROM Mask 'CBM80'
+$FD15 Restore Kernal Vectors
+$FD1A Change Vectors For User
+$FD30 Kernal Reset Vectors
+$FD50 Initialise System Constants
+$FD9B IRQ Vectors For Tape I/O
+$FDA3 Initialise I/O
+$FDDD Enable Timer
+$FDF9 Set Filename
+$FE00 Set Logical File Parameters
+$FE07 Get I/O Status Word
+$FE18 Control OS Messages
+$FE21 Set IEEE Timeout
+$FE25 Read / Set Top of Memory
+$FE34 Read / Set Bottom of Memory
+$FE43 NMI Transfer Entry
+$FE66 Warm Start Basic
+$FEBC Exit Interrupt
+$FEC2 RS232 Timing Table - NTSC
+$FED6 NMI RS232 In
+$FF07 NMI RS232 Out
+$FF43 Fake IRQ Entry
+$FF48 IRQ Entry
+$FF5B Initialize screen editor
+$FF80 Kernal Version Number
+$FF81 Init Editor & Video Chips
+$FF84 Init I/O Devices, Ports & Timers
+$FF87 Init Ram & Buffers
+$FF8A Restore Vectors
+$FF8D Change Vectors For User
+$FF90 Control OS Messages
+$FF93 Send SA After Listen
+$FF96 Send SA After Talk
+$FF99 Set/Read System RAM Top
+$FF9C Set/Read System RAM Bottom
+$FF9F Scan Keyboard
+$FFA2 Set Timeout In IEEE
+$FFA5 Handshake Serial Byte In
+$FFA8 Handshake Serial Byte Out
+$FFAB Command Serial Bus UNTALK
+$FFAE Command Serial Bus UNLISTEN
+$FFB1 Command Serial Bus LISTEN
+$FFB4 Command Serial Bus TALK
+$FFB7 Read I/O Status Word
+$FFBA Set Logical File Parameters
+$FFBD Set Filename
+$FFC0 Open Vector
+$FFC3 Close Vector
+$FFC6 Set Input
+$FFC9 Set Output
+$FFCC Restore I/O Vector
+$FFCF Input Vector, chrin
+$FFD2 Output Vector, chrout
+$FFD5 Load RAM From Device
+$FFD8 Save RAM To Device
+$FFDB Set Real-Time Clock
+$FFDE Read Real-Time Clock
+$FFE1 Test-Stop Vector
+$FFE4 Get From Keyboad
+$FFE7 Close All Channels And Files
+$FFEA Increment Real-Time Clock
+$FFED Return Screen Organization
+$FFF0 Read / Set Cursor X/Y Position
+$FFF3 Return I/O Base Address
+$FFF6 -
+$FFF8 SYSTEM
+$FFFA Vector: NMI
+$FFFC Vector: RESET
+$FFFE Vector: IRQ
